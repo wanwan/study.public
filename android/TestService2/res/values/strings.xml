@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">TestService2</string>
-    <string name="bindBtnName">Bind Service</string>
-    <string name="unbindBtnName">UnBind Service</string>
-    <string name="foregroundFlag">Set Foreground</string>
-
-    <string name="notification">Connection Status</string>
-</resources>
