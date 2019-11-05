@@ -1,0 +1,9 @@
+19c19
+< 		GLOBAL	_farjmp, _farcall
+---
+> 		GLOBAL	_farjmp
+214,217d213
+< 		RET
+< 
+< _farcall:		; void farcall(int eip, int cs);
+< 		CALL	FAR	[ESP+4]				; eip, cs

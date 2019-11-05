@@ -1,0 +1,310 @@
+Archive member included to satisfy reference by file (symbol)
+
+libc/libc.a(sprintf.o)        console.o (sprintf)
+libc/libc.a(strcmp.o)         console.o (strcmp)
+
+Allocating common symbols
+Common symbol       size              file
+
+mousedata0          0x4               mouse.o
+keyfifo             0x4               keyboard.o
+taskctl             0x4               mtask.o
+timerctl            0x271c            timer.o
+mousefifo           0x4               mouse.o
+task_timer          0x4               mtask.o
+keydata0            0x4               keyboard.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD bootpack.o
+LOAD dsctbl.o
+LOAD graphics.o
+LOAD int.o
+LOAD fifo.o
+LOAD mouse.o
+LOAD keyboard.o
+LOAD memory.o
+LOAD sheet.o
+LOAD timer.o
+LOAD mtask.o
+LOAD file.o
+LOAD window.o
+LOAD console.o
+LOAD naskfunc.o
+LOAD font_8x16.o
+                0x0000000000280000                . = 0x280000
+
+.text           0x0000000000280000     0x53f5
+ *(.text)
+ .text          0x0000000000280000      0xbbd bootpack.o
+                0x0000000000280000                HariMain
+ .text          0x0000000000280bbd      0x267 dsctbl.o
+                0x0000000000280bbd                init_gdtidt
+                0x0000000000280d64                set_segmdesc
+                0x0000000000280ddf                set_gatedesc
+ .text          0x0000000000280e24      0x5ce graphics.o
+                0x0000000000280e24                init_palette
+                0x0000000000280e41                set_palette
+                0x0000000000280eed                boxfill8
+                0x0000000000280f3f                init_screen8
+                0x000000000028115c                putfont8
+                0x000000000028125e                putfonts8_asc
+                0x00000000002812ad                init_mouse_cursor8
+                0x0000000000281383                putblock8_8
+ .text          0x00000000002813f2      0x122 int.o
+                0x00000000002813f2                init_pic
+                0x00000000002814cd                inthandler27
+ .text          0x0000000000281514      0x178 fifo.o
+                0x0000000000281514                fifo32_init
+                0x000000000028155b                fifo32_put
+                0x0000000000281608                fifo32_get
+                0x0000000000281677                fifo32_status
+ .text          0x000000000028168c      0x1e4 mouse.o
+                0x000000000028168c                inthandler2c
+                0x00000000002816e3                enable_mouse
+                0x0000000000281731                mouse_decode
+ .text          0x0000000000281870       0xa6 keyboard.o
+                0x0000000000281870                inthandler21
+                0x00000000002818b5                wait_KBC_sendready
+                0x00000000002818d5                init_keyboard
+ .text          0x0000000000281916      0x4b1 memory.o
+                0x0000000000281916                memtest
+                0x00000000002819cd                memman_init
+                0x00000000002819fa                memman_total
+                0x0000000000281a33                memman_alloc
+                0x0000000000281b1c                memman_free
+                0x0000000000281d6c                memman_alloc_4k
+                0x0000000000281d98                memman_free_4k
+ .text          0x0000000000281dc7      0xa2f sheet.o
+                0x0000000000281dc7                shtctl_init
+                0x0000000000281eaa                sheet_alloc
+                0x0000000000281f2b                sheet_setbuf
+                0x0000000000281f54                sheet_refreshmap
+                0x0000000000282108                sheet_refreshsub
+                0x00000000002822d4                sheet_updown
+                0x000000000028264b                sheet_refresh
+                0x00000000002826bc                sheet_slide
+                0x00000000002827cf                sheet_free
+ .text          0x00000000002827f6      0x299 timer.o
+                0x00000000002827f6                init_pit
+                0x000000000028289e                timer_alloc
+                0x0000000000282908                timer_free
+                0x0000000000282918                timer_init
+                0x0000000000282930                timer_settime
+                0x00000000002829df                inthandler20
+ .text          0x0000000000282a8f      0x63a mtask.o
+                0x0000000000282a8f                task_now
+                0x0000000000282abf                task_add
+                0x0000000000282b08                task_remove
+                0x0000000000282bc5                task_switchsub
+                0x0000000000282c11                task_idle
+                0x0000000000282c1e                task_init
+                0x0000000000282e23                task_alloc
+                0x0000000000282f3d                task_run
+                0x0000000000282faa                task_sleep
+                0x0000000000282ffa                task_switch
+ .text          0x00000000002830c9      0x2ca file.o
+                0x00000000002830c9                file_readfat
+                0x0000000000283179                file_loadfile
+                0x0000000000283221                file_search
+ .text          0x0000000000283393      0x508 window.o
+                0x0000000000283393                make_window8
+                0x0000000000283505                make_wtitle8
+                0x00000000002835fd                putfonts8_asc_sht
+                0x000000000028369c                make_textbox8
+ .text          0x000000000028389b     0x13f6 console.o
+                0x000000000028389b                console_task
+                0x0000000000283c5a                cons_putchar
+                0x0000000000283d62                cons_newline
+                0x0000000000283e6a                cons_putstr0
+                0x0000000000283e9d                cons_putstr1
+                0x0000000000283eda                cons_runcmd
+                0x0000000000283fc6                cmd_mem
+                0x0000000000284014                cmd_cls
+                0x0000000000284092                cmd_dir
+                0x00000000002841c6                cmd_type
+                0x0000000000284291                cmd_app
+                0x00000000002845a5                hrb_api
+                0x0000000000284a9c                inthandler0c
+                0x0000000000284afe                inthandler0d
+                0x0000000000284b60                hrb_api_linewin
+ .text          0x0000000000284c91      0x1e0 naskfunc.o
+                0x0000000000284c91                _io_hlt
+                0x0000000000284c93                _io_cli
+                0x0000000000284c95                _io_sti
+                0x0000000000284c97                _io_stihlt
+                0x0000000000284c9a                _io_in8
+                0x0000000000284ca5                _io_in16
+                0x0000000000284cb1                _io_in32
+                0x0000000000284cb7                _io_out8
+                0x0000000000284cc1                _io_out16
+                0x0000000000284ccd                _io_out32
+                0x0000000000284cd7                _io_load_eflags
+                0x0000000000284cda                _io_store_eflags
+                0x0000000000284ce1                _load_gdtr
+                0x0000000000284cf1                _load_idtr
+                0x0000000000284d01                _load_cr0
+                0x0000000000284d05                _store_cr0
+                0x0000000000284d0d                _load_tr
+                0x0000000000284d13                _asm_inthandler20
+                0x0000000000284d2e                _asm_inthandler21
+                0x0000000000284d49                _asm_inthandler27
+                0x0000000000284d64                _asm_inthandler2c
+                0x0000000000284d7f                _asm_inthandler0c
+                0x0000000000284da7                _asm_inthandler0d
+                0x0000000000284dcb                _memtest_sub
+                0x0000000000284e0d                _farjmp
+                0x0000000000284e12                _farcall
+                0x0000000000284e17                _asm_hrb_api
+                0x0000000000284e38                _asm_end_app
+                0x0000000000284e43                _start_app
+ .text          0x0000000000284e71        0x0 font_8x16.o
+ .text          0x0000000000284e71      0x447 libc/libc.a(sprintf.o)
+                0x0000000000285159                sprintf
+ .text          0x00000000002852b8      0x13d libc/libc.a(strcmp.o)
+                0x00000000002852b8                strcmp
+                0x000000000028534a                strncmp
+
+.iplt           0x00000000002853f5        0x0
+ .iplt          0x00000000002853f5        0x0 bootpack.o
+
+.rodata         0x0000000000285400     0x1120
+ .rodata        0x0000000000285400       0x20 bootpack.o
+ .rodata        0x0000000000285420       0x15 int.o
+ *fill*         0x0000000000285435        0x3 
+ .rodata        0x0000000000285438       0xd1 console.o
+ *fill*         0x0000000000285509       0x17 
+ .rodata        0x0000000000285520     0x1000 font_8x16.o
+                0x0000000000285520                fontdata_8x16
+
+.rel.dyn        0x0000000000286520        0x0
+ .rel.got       0x0000000000286520        0x0 bootpack.o
+ .rel.iplt      0x0000000000286520        0x0 bootpack.o
+ .rel.text      0x0000000000286520        0x0 bootpack.o
+
+.data           0x0000000000286520      0x320
+ *(.data)
+ .data          0x0000000000286520      0x100 bootpack.o
+ .data          0x0000000000286620        0x0 dsctbl.o
+ .data          0x0000000000286620      0x140 graphics.o
+ .data          0x0000000000286760        0x0 int.o
+ .data          0x0000000000286760        0x0 fifo.o
+ .data          0x0000000000286760        0x0 mouse.o
+ .data          0x0000000000286760        0x0 keyboard.o
+ .data          0x0000000000286760        0x0 memory.o
+ .data          0x0000000000286760        0x0 sheet.o
+ .data          0x0000000000286760        0x0 timer.o
+ .data          0x0000000000286760        0x0 mtask.o
+ .data          0x0000000000286760        0x0 file.o
+ .data          0x0000000000286760       0xe0 window.o
+ .data          0x0000000000286840        0x0 console.o
+ .data          0x0000000000286840        0x0 naskfunc.o
+ .data          0x0000000000286840        0x0 font_8x16.o
+ .data          0x0000000000286840        0x0 libc/libc.a(sprintf.o)
+ .data          0x0000000000286840        0x0 libc/libc.a(strcmp.o)
+
+.got            0x0000000000286840        0x0
+ .got           0x0000000000286840        0x0 bootpack.o
+
+.got.plt        0x0000000000286840        0x0
+ .got.plt       0x0000000000286840        0x0 bootpack.o
+
+.igot.plt       0x0000000000286840        0x0
+ .igot.plt      0x0000000000286840        0x0 bootpack.o
+
+.bss            0x0000000000286840     0x2744
+ *(.bss)
+ .bss           0x0000000000286840        0x0 bootpack.o
+ .bss           0x0000000000286840        0x0 dsctbl.o
+ .bss           0x0000000000286840        0x0 graphics.o
+ .bss           0x0000000000286840        0x0 int.o
+ .bss           0x0000000000286840        0x0 fifo.o
+ .bss           0x0000000000286840        0x0 mouse.o
+ .bss           0x0000000000286840        0x0 keyboard.o
+ .bss           0x0000000000286840        0x0 memory.o
+ .bss           0x0000000000286840        0x0 sheet.o
+ .bss           0x0000000000286840        0x0 timer.o
+ .bss           0x0000000000286840        0x0 mtask.o
+ .bss           0x0000000000286840        0x0 file.o
+ .bss           0x0000000000286840        0x0 window.o
+ .bss           0x0000000000286840        0x0 console.o
+ .bss           0x0000000000286840        0x0 naskfunc.o
+ .bss           0x0000000000286840        0x0 font_8x16.o
+ .bss           0x0000000000286840        0x0 libc/libc.a(sprintf.o)
+ .bss           0x0000000000286840        0x0 libc/libc.a(strcmp.o)
+ COMMON         0x0000000000286840        0x8 mouse.o
+                0x0000000000286840                mousedata0
+                0x0000000000286844                mousefifo
+ COMMON         0x0000000000286848        0x8 keyboard.o
+                0x0000000000286848                keyfifo
+                0x000000000028684c                keydata0
+ *fill*         0x0000000000286850       0x10 
+ COMMON         0x0000000000286860     0x271c timer.o
+                0x0000000000286860                timerctl
+ COMMON         0x0000000000288f7c        0x8 mtask.o
+                0x0000000000288f7c                taskctl
+                0x0000000000288f80                task_timer
+LOAD libc/libc.a
+OUTPUT(kernel.elf elf32-i386)
+
+.comment        0x0000000000000000       0x11
+ .comment       0x0000000000000000       0x11 bootpack.o
+                                         0x12 (size before relaxing)
+ .comment       0x0000000000000011       0x12 dsctbl.o
+ .comment       0x0000000000000011       0x12 graphics.o
+ .comment       0x0000000000000011       0x12 int.o
+ .comment       0x0000000000000011       0x12 fifo.o
+ .comment       0x0000000000000011       0x12 mouse.o
+ .comment       0x0000000000000011       0x12 keyboard.o
+ .comment       0x0000000000000011       0x12 memory.o
+ .comment       0x0000000000000011       0x12 sheet.o
+ .comment       0x0000000000000011       0x12 timer.o
+ .comment       0x0000000000000011       0x12 mtask.o
+ .comment       0x0000000000000011       0x12 file.o
+ .comment       0x0000000000000011       0x12 window.o
+ .comment       0x0000000000000011       0x12 console.o
+ .comment       0x0000000000000011       0x12 font_8x16.o
+ .comment       0x0000000000000011       0x12 libc/libc.a(sprintf.o)
+ .comment       0x0000000000000011       0x12 libc/libc.a(strcmp.o)
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 bootpack.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 dsctbl.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 graphics.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 int.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 fifo.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 mouse.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 keyboard.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 memory.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 sheet.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 timer.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 mtask.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 file.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 window.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 console.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 font_8x16.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 libc/libc.a(sprintf.o)
+ .note.GNU-stack
+                0x0000000000000000        0x0 libc/libc.a(strcmp.o)

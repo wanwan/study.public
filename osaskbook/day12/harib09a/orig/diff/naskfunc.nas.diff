@@ -1,0 +1,27 @@
+15,16c15
+< 		GLOBAL	_asm_inthandler20, _asm_inthandler21
+< 		GLOBAL	_asm_inthandler27, _asm_inthandler2c
+---
+> 		GLOBAL	_asm_inthandler21, _asm_inthandler27, _asm_inthandler2c
+18,19c17
+< 		EXTERN	_inthandler20, _inthandler21
+< 		EXTERN	_inthandler27, _inthandler2c
+---
+> 		EXTERN	_inthandler21, _inthandler27, _inthandler2c
+106,121d103
+< 
+< _asm_inthandler20:
+< 		PUSH	ES
+< 		PUSH	DS
+< 		PUSHAD
+< 		MOV		EAX,ESP
+< 		PUSH	EAX
+< 		MOV		AX,SS
+< 		MOV		DS,AX
+< 		MOV		ES,AX
+< 		CALL	_inthandler20
+< 		POP		EAX
+< 		POPAD
+< 		POP		DS
+< 		POP		ES
+< 		IRETD

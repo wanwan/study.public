@@ -1,0 +1,19 @@
+11,12c11
+< 	struct FIFO8 timerfifo;
+< 	char s[40], keybuf[32], mousebuf[128], timerbuf[8];
+---
+> 	char s[40], keybuf[32], mousebuf[128];
+30,32d28
+< 	fifo8_init(&timerfifo, 8, timerbuf);
+< 	settimer(1000, &timerfifo, 1);
+< 
+75c71
+< 		if (fifo8_status(&keyfifo) + fifo8_status(&mousefifo) + fifo8_status(&timerfifo) == 0) {
+---
+> 		if (fifo8_status(&keyfifo) + fifo8_status(&mousefifo) == 0) {
+124,128d119
+< 			} else if (fifo8_status(&timerfifo) != 0) {
+< 				i = fifo8_get(&timerfifo); /* ‚Æ‚è‚ ‚¦‚¸“Ç‚Ýž‚Þi‚©‚ç‚É‚·‚é‚½‚ß‚Éj */
+< 				io_sti();
+< 				putfonts8_asc(buf_back, binfo->scrnx, 0, 64, COL8_FFFFFF, "10[sec]");
+< 				sheet_refresh(sht_back, 0, 64, 56, 80);

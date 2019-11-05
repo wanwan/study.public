@@ -1,0 +1,12 @@
+106c106
+< 		if (timer != task_timer) {
+---
+> 		if (timer != mt_timer) {
+109c109
+< 			ts = 1; /* task_timerがタイムアウトした */
+---
+> 			ts = 1; /* mt_timerがタイムアウトした */
+116c116
+< 		task_switch();
+---
+> 		mt_taskswitch();

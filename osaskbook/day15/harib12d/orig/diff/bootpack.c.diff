@@ -1,0 +1,16 @@
+126d125
+< 	*((int *) 0x0fec) = (int) sht_back;
+291,293c290
+< 	int i, fifobuf[128], count = 0;
+< 	char s[11];
+< 	struct SHEET *sht_back;
+---
+> 	int i, fifobuf[128];
+299d295
+< 	sht_back = (struct SHEET *) *((int *) 0x0fec);
+302,304d297
+< 		count++;
+< 		sprintf(s, "%10d", count);
+< 		putfonts8_asc_sht(sht_back, 0, 144, COL8_FFFFFF, COL8_008484, s, 10);
+307a301
+> 			io_hlt();

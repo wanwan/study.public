@@ -1,0 +1,6 @@
+186,190d185
+< 
+< /* mtask.c */
+< extern struct TIMER *mt_timer;
+< void mt_init(void);
+< void mt_taskswitch(void);

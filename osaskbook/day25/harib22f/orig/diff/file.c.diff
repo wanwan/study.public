@@ -1,0 +1,4 @@
+59c59
+< 		if (finfo->name[0] == 0x00) {
+---
+> 		if (finfo[i].name[0] == 0x00) {

@@ -1,0 +1,9 @@
+19d18
+< 		GLOBAL	_api_getkey
+182,187d180
+< 		RET
+< 
+< _api_getkey:		; int api_getkey(int mode);
+< 		MOV		EDX,15
+< 		MOV		EAX,[ESP+4]	; mode
+< 		INT		0x40

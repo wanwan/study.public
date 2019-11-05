@@ -1,0 +1,4 @@
+6d5
+< void api_closewin(int win);
+21d19
+< 	api_closewin(win);

@@ -1,0 +1,73 @@
+151,167d150
+< void cons_putstr0(struct CONSOLE *cons, char *s)
+< {
+< 	for (; *s != 0; s++) {
+< 		cons_putchar(cons, *s, 1);
+< 	}
+< 	return;
+< }
+< 
+< void cons_putstr1(struct CONSOLE *cons, char *s, int l)
+< {
+< 	int i;
+< 	for (i = 0; i < l; i++) {
+< 		cons_putchar(cons, s[i], 1);
+< 	}
+< 	return;
+< }
+< 
+181c164,166
+< 			cons_putstr0(cons, "Bad command.\n\n");
+---
+> 			putfonts8_asc_sht(cons->sht, 8, cons->cur_y, COL8_FFFFFF, COL8_000000, "Bad command.", 12);
+> 			cons_newline(cons);
+> 			cons_newline(cons);
+190,192c175,182
+< 	char s[60];
+< 	sprintf(s, "total   %dMB\nfree %dKB\n\n", memtotal / (1024 * 1024), memman_total(memman) / 1024);
+< 	cons_putstr0(cons, s);
+---
+> 	char s[30];
+> 	sprintf(s, "total   %dMB", memtotal / (1024 * 1024));
+> 	putfonts8_asc_sht(cons->sht, 8, cons->cur_y, COL8_FFFFFF, COL8_000000, s, 30);
+> 	cons_newline(cons);
+> 	sprintf(s, "free %dKB", memman_total(memman) / 1024);
+> 	putfonts8_asc_sht(cons->sht, 8, cons->cur_y, COL8_FFFFFF, COL8_000000, s, 30);
+> 	cons_newline(cons);
+> 	cons_newline(cons);
+221c211
+< 				sprintf(s, "filename.ext   %7d\n", finfo[i].size);
+---
+> 				sprintf(s, "filename.ext   %7d", finfo[i].size);
+228c218,219
+< 				cons_putstr0(cons, s);
+---
+> 				putfonts8_asc_sht(cons->sht, 8, cons->cur_y, COL8_FFFFFF, COL8_000000, s, 30);
+> 				cons_newline(cons);
+240a232
+> 	int i;
+245c237,239
+< 		cons_putstr1(cons, p, finfo->size);
+---
+> 		for (i = 0; i < finfo->size; i++) {
+> 			cons_putchar(cons, p[i], 1);
+> 		}
+249c243,244
+< 		cons_putstr0(cons, "File not found.\n");
+---
+> 		putfonts8_asc_sht(cons->sht, 8, cons->cur_y, COL8_FFFFFF, COL8_000000, "File not found.", 15);
+> 		cons_newline(cons);
+296,308d290
+< }
+< 
+< void hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax)
+< {
+< 	struct CONSOLE *cons = (struct CONSOLE *) *((int *) 0x0fec);
+< 	if (edx == 1) {
+< 		cons_putchar(cons, eax & 0xff, 1);
+< 	} else if (edx == 2) {
+< 		cons_putstr0(cons, (char *) ebx);
+< 	} else if (edx == 3) {
+< 		cons_putstr1(cons, (char *) ebx, ecx);
+< 	}
+< 	return;

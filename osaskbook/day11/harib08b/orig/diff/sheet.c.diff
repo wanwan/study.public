@@ -1,0 +1,6 @@
+55,59d54
+< 	/* refresh”ÍˆÍ‚ª‰æ–ÊŠO‚É‚Í‚Ýo‚µ‚Ä‚¢‚½‚ç•â³ */
+< 	if (vx0 < 0) { vx0 = 0; }
+< 	if (vy0 < 0) { vy0 = 0; }
+< 	if (vx1 > ctl->xsize) { vx1 = ctl->xsize; }
+< 	if (vy1 > ctl->ysize) { vy1 = ctl->ysize; }

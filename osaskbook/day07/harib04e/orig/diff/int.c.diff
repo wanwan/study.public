@@ -1,0 +1,15 @@
+30c30
+< struct FIFO8 keyfifo;
+---
+> struct KEYBUF keybuf;
+37c37,44
+< 	fifo8_put(&keyfifo, data);
+---
+> 	if (keybuf.len < 32) {
+> 		keybuf.data[keybuf.next_w] = data;
+> 		keybuf.len++;
+> 		keybuf.next_w++;
+> 		if (keybuf.next_w == 32) {
+> 			keybuf.next_w = 0;
+> 		}
+> 	}

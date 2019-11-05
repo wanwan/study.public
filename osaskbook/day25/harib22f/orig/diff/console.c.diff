@@ -1,0 +1,35 @@
+7c7
+< void console_task(struct SHEET *sheet, int memtotal)
+---
+> void console_task(struct SHEET *sheet, unsigned int memtotal)
+18c18
+< 	task->cons = &cons;
+---
+> 	*((int *) 0x0fec) = (int) &cons;
+167c167
+< void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, int memtotal)
+---
+> void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, unsigned int memtotal)
+186c186
+< void cmd_mem(struct CONSOLE *cons, int memtotal)
+---
+> void cmd_mem(struct CONSOLE *cons, unsigned int memtotal)
+296c296
+< 			task->ds_base = (int) q;
+---
+> 			*((int *) 0xfe8) = (int) q;
+325a326
+> 	int ds_base = *((int *) 0xfe8);
+327,328c328
+< 	int ds_base = task->ds_base;
+< 	struct CONSOLE *cons = task->cons;
+---
+> 	struct CONSOLE *cons = (struct CONSOLE *) *((int *) 0x0fec);
+449a450
+> 	struct CONSOLE *cons = (struct CONSOLE *) *((int *) 0x0fec);
+451d451
+< 	struct CONSOLE *cons = task->cons;
+460a461
+> 	struct CONSOLE *cons = (struct CONSOLE *) *((int *) 0x0fec);
+462d462
+< 	struct CONSOLE *cons = task->cons;

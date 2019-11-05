@@ -1,0 +1,9 @@
+53c53
+< 	timer->timeout = timeout + timerctl.count;
+---
+> 	timer->timeout = timeout;
+65c65,66
+< 			if (timerctl.timer[i].timeout <= timerctl.count) {
+---
+> 			timerctl.timer[i].timeout--;
+> 			if (timerctl.timer[i].timeout == 0) {

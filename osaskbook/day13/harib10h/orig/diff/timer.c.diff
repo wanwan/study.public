@@ -1,0 +1,88 @@
+55,56c55
+< 	int e;
+< 	struct TIMER *t, *s;
+---
+> 	int e, i, j;
+61,78d59
+< 	timerctl.using++;
+< 	if (timerctl.using == 1) {
+< 		/* 動作中のタイマはこれ一つになる場合 */
+< 		timerctl.t0 = timer;
+< 		timer->next = 0; /* 次はない */
+< 		timerctl.next = timer->timeout;
+< 		io_store_eflags(e);
+< 		return;
+< 	}
+< 	t = timerctl.t0;
+< 	if (timer->timeout <= t->timeout) {
+< 		/* 先頭に入れる場合 */
+< 		timerctl.t0 = timer;
+< 		timer->next = t; /* 次はt */
+< 		timerctl.next = timer->timeout;
+< 		io_store_eflags(e);
+< 		return;
+< 	}
+80,91c61,63
+< 	for (;;) {
+< 		s = t;
+< 		t = t->next;
+< 		if (t == 0) {
+< 			break; /* 一番うしろになった */
+< 		}
+< 		if (timer->timeout <= t->timeout) {
+< 			/* sとtの間に入れる場合 */
+< 			s->next = timer; /* sの次はtimer */
+< 			timer->next = t; /* timerの次はt */
+< 			io_store_eflags(e);
+< 			return;
+---
+> 	for (i = 0; i < timerctl.using; i++) {
+> 		if (timerctl.timers[i]->timeout >= timer->timeout) {
+> 			break;
+94,96c66,73
+< 	/* 一番うしろに入れる場合 */
+< 	s->next = timer;
+< 	timer->next = 0;
+---
+> 	/* うしろをずらす */
+> 	for (j = timerctl.using; j > i; j--) {
+> 		timerctl.timers[j] = timerctl.timers[j - 1];
+> 	}
+> 	timerctl.using++;
+> 	/* あいたすきまに入れる */
+> 	timerctl.timers[i] = timer;
+> 	timerctl.next = timerctl.timers[0]->timeout;
+103,104c80
+< 	int i;
+< 	struct TIMER *timer;
+---
+> 	int i, j;
+110d85
+< 	timer = timerctl.t0; /* とりあえず先頭の番地をtimerに代入 */
+113c88
+< 		if (timer->timeout > timerctl.count) {
+---
+> 		if (timerctl.timers[i]->timeout > timerctl.count) {
+117,119c92,93
+< 		timer->flags = TIMER_FLAGS_ALLOC;
+< 		fifo32_put(timer->fifo, timer->data);
+< 		timer = timer->next; /* 次のタイマの番地をtimerに代入 */
+---
+> 		timerctl.timers[i]->flags = TIMER_FLAGS_ALLOC;
+> 		fifo32_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);
+120a95
+> 	/* ちょうどi個のタイマがタイムアウトした。残りをずらす。 */
+122,126c97,99
+< 
+< 	/* 新しいずらし */
+< 	timerctl.t0 = timer;
+< 
+< 	/* timerctl.nextの設定 */
+---
+> 	for (j = 0; j < timerctl.using; j++) {
+> 		timerctl.timers[j] = timerctl.timers[i + j];
+> 	}
+128c101
+< 		timerctl.next = timerctl.t0->timeout;
+---
+> 		timerctl.next = timerctl.timers[0]->timeout;

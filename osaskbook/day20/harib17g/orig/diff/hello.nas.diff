@@ -1,0 +1,25 @@
+1d0
+< [INSTRSET "i486p"]
+3,7c2,10
+< 		MOV		ECX,msg
+< putloop:
+< 		MOV		AL,[CS:ECX]
+< 		CMP		AL,0
+< 		JE		fin
+---
+> 		MOV		AL,'h'
+> 		INT		0x40
+> 		MOV		AL,'e'
+> 		INT		0x40
+> 		MOV		AL,'l'
+> 		INT		0x40
+> 		MOV		AL,'l'
+> 		INT		0x40
+> 		MOV		AL,'o'
+9,11d11
+< 		ADD		ECX,1
+< 		JMP		putloop
+< fin:
+13,14d12
+< msg:
+< 		DB	"hello",0

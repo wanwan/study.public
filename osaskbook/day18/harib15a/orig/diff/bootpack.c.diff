@@ -1,0 +1,31 @@
+194,195d193
+< 						cursor_c = -1; /* カーソルを消す */
+< 						boxfill8(sht_win->buf, sht_win->bxsize, COL8_FFFFFF, cursor_x, 28, cursor_x + 7, 43);
+200d197
+< 						cursor_c = COL8_000000; /* カーソルを出す */
+240,242c237
+< 				if (cursor_c >= 0) {
+< 					boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+< 				}
+---
+> 				boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+284,286c279
+< 					if (cursor_c >= 0) {
+< 						cursor_c = COL8_000000;
+< 					}
+---
+> 					cursor_c = COL8_000000;
+289,291c282
+< 					if (cursor_c >= 0) {
+< 						cursor_c = COL8_FFFFFF;
+< 					}
+---
+> 					cursor_c = COL8_FFFFFF;
+294,297c285,286
+< 				if (cursor_c >= 0) {
+< 					boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+< 					sheet_refresh(sht_win, cursor_x, 28, cursor_x + 8, 44);
+< 				}
+---
+> 				boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+> 				sheet_refresh(sht_win, cursor_x, 28, cursor_x + 8, 44);

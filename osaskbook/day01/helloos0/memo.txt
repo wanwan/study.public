@@ -1,0 +1,109 @@
+
+* partition table 
+http://thestarman.pcministry.com/asm/mbr/PartTables.htm
+
+
+
+
+ruri:~/works/osaskbook/day1 $ od -Ax -tx1z test.img 
+000000 eb 3c 90 6d 6b 66 73 2e 66 61 74 00 02 01 01 00  >.<.mkfs.fat.....<
+000010 02 e0 00 40 0b f0 09 00 12 00 02 00 00 00 00 00  >...@............<
+000020 00 00 00 00 00 00 29 5a 0c d2 6e 4e 4f 20 4e 41  >......)Z..nNO NA<
+000030 4d 45 20 20 20 20 46 41 54 31 32 20 20 20 0e 1f  >ME    FAT12   ..<
+000040 be 5b 7c ac 22 c0 74 0b 56 b4 0e bb 07 00 cd 10  >.[|.".t.V.......<
+000050 5e eb f0 32 e4 cd 16 cd 19 eb fe 54 68 69 73 20  >^..2.......This <
+000060 69 73 20 6e 6f 74 20 61 20 62 6f 6f 74 61 62 6c  >is not a bootabl<
+000070 65 20 64 69 73 6b 2e 20 20 50 6c 65 61 73 65 20  >e disk.  Please <
+000080 69 6e 73 65 72 74 20 61 20 62 6f 6f 74 61 62 6c  >insert a bootabl<
+000090 65 20 66 6c 6f 70 70 79 20 61 6e 64 0d 0a 70 72  >e floppy and..pr<
+0000a0 65 73 73 20 61 6e 79 20 6b 65 79 20 74 6f 20 74  >ess any key to t<
+0000b0 72 79 20 61 67 61 69 6e 20 2e 2e 2e 20 0d 0a 00  >ry again ... ...<
+0000c0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+*
+0001f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 55 aa  >..............U.<
+000200 f0 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+000210 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+*
+001400 f0 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+001410 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+*
+168000
+
+
+ruri:~/works/osaskbook/day1 $ dd if=/dev/zero of=test.img bs=512 count=2880
+2880+0 records in
+2880+0 records out
+1474560 bytes (1.5 MB, 1.4 MiB) copied, 0.00486758 s, 303 MB/s
+ruri:~/works/osaskbook/day1 $ fdisk test.img
+
+Welcome to fdisk (util-linux 2.32).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0xcdd2f553.
+
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 1
+First sector (1-2879, default 1): 
+Last sector, +sectors or +size{K,M,G,T,P} (1-2879, default 2879): 
+
+Created a new partition 1 of type 'Linux' and of size 1.4 MiB.
+
+Command (m for help): L
+L: unknown command
+
+Command (m for help): t
+
+Selected partition 1
+Hex code (type L to list all codes): 
+Hex code (type L to list all codes): L
+
+ 0  Empty           24  NEC DOS         81  Minix / old Lin bf  Solaris        
+ 1  FAT12           27  Hidden NTFS Win 82  Linux swap / So c1  DRDOS/sec (FAT-
+ 2  XENIX root      39  Plan 9          83  Linux           c4  DRDOS/sec (FAT-
+ 3  XENIX usr       3c  PartitionMagic  84  OS/2 hidden or  c6  DRDOS/sec (FAT-
+ 4  FAT16 <32M      40  Venix 80286     85  Linux extended  c7  Syrinx         
+ 5  Extended        41  PPC PReP Boot   86  NTFS volume set da  Non-FS data    
+ 6  FAT16           42  SFS             87  NTFS volume set db  CP/M / CTOS / .
+ 7  HPFS/NTFS/exFAT 4d  QNX4.x          88  Linux plaintext de  Dell Utility   
+ 8  AIX             4e  QNX4.x 2nd part 8e  Linux LVM       df  BootIt         
+ 9  AIX bootable    4f  QNX4.x 3rd part 93  Amoeba          e1  DOS access     
+ a  OS/2 Boot Manag 50  OnTrack DM      94  Amoeba BBT      e3  DOS R/O        
+ b  W95 FAT32       51  OnTrack DM6 Aux 9f  BSD/OS          e4  SpeedStor      
+ c  W95 FAT32 (LBA) 52  CP/M            a0  IBM Thinkpad hi ea  Rufus alignment
+ e  W95 FAT16 (LBA) 53  OnTrack DM6 Aux a5  FreeBSD         eb  BeOS fs        
+ f  W95 Ext'd (LBA) 54  OnTrackDM6      a6  OpenBSD         ee  GPT            
+10  OPUS            55  EZ-Drive        a7  NeXTSTEP        ef  EFI (FAT-12/16/
+11  Hidden FAT12    56  Golden Bow      a8  Darwin UFS      f0  Linux/PA-RISC b
+12  Compaq diagnost 5c  Priam Edisk     a9  NetBSD          f1  SpeedStor      
+14  Hidden FAT16 <3 61  SpeedStor       ab  Darwin boot     f4  SpeedStor      
+16  Hidden FAT16    63  GNU HURD or Sys af  HFS / HFS+      f2  DOS secondary  
+17  Hidden HPFS/NTF 64  Novell Netware  b7  BSDI fs         fb  VMware VMFS    
+18  AST SmartSleep  65  Novell Netware  b8  BSDI swap       fc  VMware VMKCORE 
+1b  Hidden W95 FAT3 70  DiskSecure Mult bb  Boot Wizard hid fd  Linux raid auto
+1c  Hidden W95 FAT3 75  PC/IX           bc  Acronis FAT32 L fe  LANstep        
+1e  Hidden W95 FAT1 80  Old Minix       be  Solaris boot    ff  BBT            
+Hex code (type L to list all codes): 6
+Changed type of partition 'Linux' to 'FAT16'.
+
+Command (m for help): w
+The partition table has been altered.
+Syncing disks.
+
+ruri:~/works/osaskbook/day1 $ od -Ax -tx1z test.img
+000000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+*
+0001b0 00 00 00 00 00 00 00 00 53 f5 d2 cd 00 00 00 00  >........S.......<
+0001c0 02 00 06 2d 2d 00 01 00 00 00 3f 0b 00 00 00 00  >...--.....?.....<
+0001d0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+*
+0001f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 55 aa  >..............U.<
+000200 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  >................<
+*
+168000
+

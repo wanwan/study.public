@@ -1,0 +1,13 @@
+432,443d431
+< 	} else if (edx == 20) {
+< 		if (eax == 0) {
+< 			i = io_in8(0x61);
+< 			io_out8(0x61, i & 0x0d);
+< 		} else {
+< 			i = 1193180000 / eax;
+< 			io_out8(0x43, 0xb6);
+< 			io_out8(0x42, i & 0xff);
+< 			io_out8(0x42, i >> 8);
+< 			i = io_in8(0x61);
+< 			io_out8(0x61, (i | 0x03) & 0x0f);
+< 		}

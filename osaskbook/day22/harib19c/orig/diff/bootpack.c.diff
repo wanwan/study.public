@@ -1,0 +1,11 @@
+44d43
+< 	struct CONSOLE *cons;
+227,234d225
+< 				}
+< 				if (i == 256 + 0x3b && key_shift != 0 && task_cons->tss.ss0 != 0) {	/* Shift+F1 */
+< 					cons = (struct CONSOLE *) *((int *) 0x0fec);
+< 					cons_putstr0(cons, "\nBreak(key) :\n");
+< 					io_cli();	/* 強制終了処理中にタスクが変わると困るから */
+< 					task_cons->tss.eax = (int) &(task_cons->tss.esp0);
+< 					task_cons->tss.eip = (int) asm_end_app;
+< 					io_sti();

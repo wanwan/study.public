@@ -1,0 +1,6 @@
+306c306
+< 				if ((sht->flags & 0x11) == 0x11 && sht->task == task) {
+---
+> 				if (sht->flags != 0 && sht->task == task) {
+347d346
+< 		sht->flags |= 0x10;

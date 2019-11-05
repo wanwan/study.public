@@ -1,0 +1,6 @@
+168,170d167
+< 	unsigned int timeout;
+< 	struct FIFO8 *fifo;
+< 	unsigned char data;
+175d171
+< void settimer(unsigned int timeout, struct FIFO8 *fifo, unsigned char data);

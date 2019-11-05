@@ -1,0 +1,4 @@
+311d310
+< 			timer_cancelall(&task->fifo);
+425d423
+< 		((struct TIMER *) reg[7])->flags2 = 1;	/* Ž©“®ƒLƒƒƒ“ƒZƒ‹—LŒø */

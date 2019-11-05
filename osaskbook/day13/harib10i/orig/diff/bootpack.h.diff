@@ -1,0 +1,4 @@
+172c172
+< 	unsigned int count, next;
+---
+> 	unsigned int count, next, using;

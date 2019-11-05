@@ -1,0 +1,3 @@
+23,24d22
+< int load_cr0(void);
+< void store_cr0(int cr0);

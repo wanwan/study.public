@@ -1,0 +1,29 @@
+68,74d67
+< void task_idle(void)
+< {
+< 	for (;;) {
+< 		io_hlt();
+< 	}
+< }
+< 
+78c71
+< 	struct TASK *task, *idle;
+---
+> 	struct TASK *task;
+80d72
+< 
+91d82
+< 
+101,112d91
+< 
+< 	idle = task_alloc();
+< 	idle->tss.esp = memman_alloc_4k(memman, 64 * 1024) + 64 * 1024;
+< 	idle->tss.eip = (int) &task_idle;
+< 	idle->tss.es = 1 * 8;
+< 	idle->tss.cs = 2 * 8;
+< 	idle->tss.ss = 1 * 8;
+< 	idle->tss.ds = 1 * 8;
+< 	idle->tss.fs = 1 * 8;
+< 	idle->tss.gs = 1 * 8;
+< 	task_run(idle, MAX_TASKLEVELS - 1, 1);
+< 

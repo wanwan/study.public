@@ -1,0 +1,21 @@
+16d15
+< 	timerctl.timeout = 0;
+24,41d22
+< 	if (timerctl.timeout > 0) { /* タイムアウトが設定されている */
+< 		timerctl.timeout--;
+< 		if (timerctl.timeout == 0) {
+< 			fifo8_put(timerctl.fifo, timerctl.data);
+< 		}
+< 	}
+< 	return;
+< }
+< 
+< void settimer(unsigned int timeout, struct FIFO8 *fifo, unsigned char data)
+< {
+< 	int eflags;
+< 	eflags = io_load_eflags();
+< 	io_cli();
+< 	timerctl.timeout = timeout;
+< 	timerctl.fifo = fifo;
+< 	timerctl.data = data;
+< 	io_store_eflags(eflags);

@@ -1,0 +1,16 @@
+7c7
+< void fifo32_init(struct FIFO32 *fifo, int size, int *buf)
+---
+> void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf)
+19c19
+< int fifo32_put(struct FIFO32 *fifo, int data)
+---
+> int fifo8_put(struct FIFO8 *fifo, unsigned char data)
+36c36
+< int fifo32_get(struct FIFO32 *fifo)
+---
+> int fifo8_get(struct FIFO8 *fifo)
+53c53
+< int fifo32_status(struct FIFO32 *fifo)
+---
+> int fifo8_status(struct FIFO8 *fifo)

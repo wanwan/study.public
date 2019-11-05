@@ -1,0 +1,14 @@
+92d91
+< 	char ts = 0;
+106,110c105
+< 		if (timer != mt_timer) {
+< 			fifo32_put(timer->fifo, timer->data);
+< 		} else {
+< 			ts = 1; /* mt_timerがタイムアウトした */
+< 		}
+---
+> 		fifo32_put(timer->fifo, timer->data);
+115,117d109
+< 	if (ts != 0) {
+< 		mt_taskswitch();
+< 	}

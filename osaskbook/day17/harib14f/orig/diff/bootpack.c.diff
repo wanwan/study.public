@@ -1,0 +1,11 @@
+47c47
+< 	int key_to = 0, key_shift = 0, key_leds = (binfo->leds >> 4) & 7;
+---
+> 	int key_to = 0, key_shift = 0;
+146,151d145
+< 				}
+< 				if ('A' <= s[0] && s[0] <= 'Z') {	/* 入力文字がアルファベット */
+< 					if (((key_leds & 4) == 0 && key_shift == 0) ||
+< 							((key_leds & 4) != 0 && key_shift != 0)) {
+< 						s[0] += 0x20;	/* 大文字を小文字に変換 */
+< 					}

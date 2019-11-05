@@ -1,0 +1,9 @@
+19c19
+< 		GLOBAL	_taskswitch3, _taskswitch4
+---
+> 		GLOBAL	_taskswitch4
+208,211d207
+< 		RET
+< 
+< _taskswitch3:	; void taskswitch3(void);
+< 		JMP		3*8:0

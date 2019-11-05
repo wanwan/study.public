@@ -1,0 +1,94 @@
+diff diff/a_nask.nas.diff ../../harib20a/orig/diff/a_nask.nas.diff
+1,3c1,5
+< 15d14
+< < 		GLOBAL	_api_point
+< 120,134d118
+---
+> 12,14d11
+> < 		GLOBAL	_api_initmalloc
+> < 		GLOBAL	_api_malloc
+> < 		GLOBAL	_api_free
+> 88,118d84
+6,8c8
+< < _api_point:		; void api_point(int win, int x, int y, int col);
+< < 		PUSH	EDI
+< < 		PUSH	ESI
+---
+> < _api_initmalloc:	; void api_initmalloc(void);
+10,14c10,34
+< < 		MOV		EDX,11
+< < 		MOV		EBX,[ESP+16]	; win
+< < 		MOV		ESI,[ESP+20]	; x
+< < 		MOV		EDI,[ESP+24]	; y
+< < 		MOV		EAX,[ESP+28]	; col
+---
+> < 		MOV		EDX,8
+> < 		MOV		EBX,[CS:0x0020]		; malloc領域の番地
+> < 		MOV		EAX,EBX
+> < 		ADD		EAX,32*1024			; 32KBを足す
+> < 		MOV		ECX,[CS:0x0000]		; データセグメントの大きさ
+> < 		SUB		ECX,EAX
+> < 		INT		0x40
+> < 		POP		EBX
+> < 		RET
+> < 
+> < _api_malloc:		; char *api_malloc(int size);
+> < 		PUSH	EBX
+> < 		MOV		EDX,9
+> < 		MOV		EBX,[CS:0x0020]
+> < 		MOV		ECX,[ESP+8]			; size
+> < 		INT		0x40
+> < 		POP		EBX
+> < 		RET
+> < 
+> < _api_free:			; void api_free(char *addr, int size);
+> < 		PUSH	EBX
+> < 		MOV		EDX,10
+> < 		MOV		EBX,[CS:0x0020]
+> < 		MOV		EAX,[ESP+ 8]		; addr
+> < 		MOV		ECX,[ESP+12]		; size
+17,18d36
+< < 		POP		ESI
+< < 		POP		EDI
+diff diff/console.c.diff ../../harib20a/orig/diff/console.c.diff
+1,5c1,11
+< 359,362d358
+< < 	} else if (edx == 11) {
+< < 		sht = (struct SHEET *) ebx;
+< < 		sht->buf[sht->bxsize * edi + esi] = eax;
+< < 		sheet_refresh(sht, esi, edi, esi + 1, edi + 1);
+---
+> 349,358d348
+> < 	} else if (edx == 8) {
+> < 		memman_init((struct MEMMAN *) (ebx + ds_base));
+> < 		ecx &= 0xfffffff0;	/* 16バイト単位に */
+> < 		memman_free((struct MEMMAN *) (ebx + ds_base), eax, ecx);
+> < 	} else if (edx == 9) {
+> < 		ecx = (ecx + 0x0f) & 0xfffffff0; /* 16バイト単位に切り上げ */
+> < 		reg[7] = memman_alloc((struct MEMMAN *) (ebx + ds_base), ecx);
+> < 	} else if (edx == 10) {
+> < 		ecx = (ecx + 0x0f) & 0xfffffff0; /* 16バイト単位に切り上げ */
+> < 		memman_free((struct MEMMAN *) (ebx + ds_base), eax, ecx);
+Only in diff: diff.diff
+Only in ../../harib20a/orig/diff: dsctbl.c.diff
+Only in ../../harib20a/orig/diff: fifo.c.diff
+Only in ../../harib20a/orig/diff: file.c.diff
+Only in ../../harib20a/orig/diff: graphic.c.diff
+Only in ../../harib20a/orig/diff: hello.nas.diff
+Only in ../../harib20a/orig/diff: hello2.nas.diff
+Only in ../../harib20a/orig/diff: hello3.c.diff
+Only in ../../harib20a/orig/diff: hello4.c.diff
+Only in ../../harib20a/orig/diff: hello5.nas.diff
+Only in ../../harib20a/orig/diff: int.c.diff
+Only in ../../harib20a/orig/diff: ipl10.nas.diff
+Only in ../../harib20a/orig/diff: keyboard.c.diff
+Only in ../../harib20a/orig/diff: memory.c.diff
+Only in ../../harib20a/orig/diff: mouse.c.diff
+Only in ../../harib20a/orig/diff: mtask.c.diff
+Only in ../../harib20a/orig/diff: naskfunc.nas.diff
+Only in ../../harib20a/orig/diff: sheet.c.diff
+Only in ../../harib20a/orig/diff: timer.c.diff
+Only in ../../harib20a/orig/diff: window.c.diff
+Only in ../../harib20a/orig/diff: winhelo.c.diff
+Only in ../../harib20a/orig/diff: winhelo2.c.diff
+Only in ../../harib20a/orig/diff: winhelo3.c.diff

@@ -1,0 +1,17 @@
+30a31
+> void asm_inthandler27(void);
+103a105
+> void inthandler27(int *esp);
+213,214d214
+< 	struct CONSOLE *cons;
+< 	int ds_base;
+248c248
+< void console_task(struct SHEET *sheet, int memtotal);
+---
+> void console_task(struct SHEET *sheet, unsigned int memtotal);
+253,254c253,254
+< void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, int memtotal);
+< void cmd_mem(struct CONSOLE *cons, int memtotal);
+---
+> void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, unsigned int memtotal);
+> void cmd_mem(struct CONSOLE *cons, unsigned int memtotal);

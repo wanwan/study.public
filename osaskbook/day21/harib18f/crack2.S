@@ -1,0 +1,6 @@
+.code32
+
+	movl	$1*8, %eax				# OS用のセグメント番号
+	movw	%ax, %ds				# これをDSにいれちゃう
+	movb	$0, (0x102600)
+	retf

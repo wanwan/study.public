@@ -1,0 +1,98 @@
+126,147c126,132
+< 				if (i < 0x54 + 256 && keytable[i - 256] != 0) { /* 通常文字 */
+< 					if (key_to == 0) {	/* タスクAへ */
+< 						if (cursor_x < 128) {
+< 							/* 一文字表示してから、カーソルを1つ進める */
+< 							s[0] = keytable[i - 256];
+< 							s[1] = 0;
+< 							putfonts8_asc_sht(sht_win, cursor_x, 28, COL8_000000, COL8_FFFFFF, s, 1);
+< 							cursor_x += 8;
+< 						}
+< 					} else {	/* コンソールへ */
+< 						fifo32_put(&task_cons->fifo, keytable[i - 256] + 256);
+< 					}
+< 				}
+< 				if (i == 256 + 0x0e) {	/* バックスペース */
+< 					if (key_to == 0) {	/* タスクAへ */
+< 						if (cursor_x > 8) {
+< 							/* カーソルをスペースで消してから、カーソルを1つ戻す */
+< 							putfonts8_asc_sht(sht_win, cursor_x, 28, COL8_000000, COL8_FFFFFF, " ", 1);
+< 							cursor_x -= 8;
+< 						}
+< 					} else {	/* コンソールへ */
+< 						fifo32_put(&task_cons->fifo, 8 + 256);
+---
+> 				if (i < 0x54 + 256) {
+> 					if (keytable[i - 256] != 0 && cursor_x < 128) { /* 通常文字 */
+> 						/* 一文字表示してから、カーソルを1つ進める */
+> 						s[0] = keytable[i - 256];
+> 						s[1] = 0;
+> 						putfonts8_asc_sht(sht_win, cursor_x, 28, COL8_000000, COL8_FFFFFF, s, 1);
+> 						cursor_x += 8;
+149a135,139
+> 				if (i == 256 + 0x0e && cursor_x > 8) { /* バックスペース */
+> 					/* カーソルをスペースで消してから、カーソルを1つ戻す */
+> 					putfonts8_asc_sht(sht_win, cursor_x, 28, COL8_000000, COL8_FFFFFF, " ", 1);
+> 					cursor_x -= 8;
+> 				}
+305a296
+> 	struct FIFO32 fifo;
+308,309d298
+< 	int i, fifobuf[128], cursor_x = 16, cursor_c = COL8_000000;
+< 	char s[2];
+311c300,302
+< 	fifo32_init(&task->fifo, 128, fifobuf, task);
+---
+> 	int i, fifobuf[128], cursor_x = 8, cursor_c = COL8_000000;
+> 	fifo32_init(&fifo, 128, fifobuf, task);
+> 
+313c304
+< 	timer_init(timer, &task->fifo, 1);
+---
+> 	timer_init(timer, &fifo, 1);
+316,318d306
+< 	/* プロンプト表示 */
+< 	putfonts8_asc_sht(sheet, 8, 28, COL8_FFFFFF, COL8_000000, ">", 1);
+< 
+321c309
+< 		if (fifo32_status(&task->fifo) == 0) {
+---
+> 		if (fifo32_status(&fifo) == 0) {
+325c313
+< 			i = fifo32_get(&task->fifo);
+---
+> 			i = fifo32_get(&fifo);
+329c317
+< 					timer_init(timer, &task->fifo, 0); /* 次は0を */
+---
+> 					timer_init(timer, &fifo, 0); /* 次は0を */
+332c320
+< 					timer_init(timer, &task->fifo, 1); /* 次は1を */
+---
+> 					timer_init(timer, &fifo, 1); /* 次は1を */
+335a324,325
+> 				boxfill8(sheet->buf, sheet->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+> 				sheet_refresh(sheet, cursor_x, 28, cursor_x + 8, 44);
+337,358d326
+< 			if (256 <= i && i <= 511) { /* キーボードデータ（タスクA経由） */
+< 				if (i == 8 + 256) {
+< 					/* バックスペース */
+< 					if (cursor_x > 16) {
+< 						/* カーソルをスペースで消してから、カーソルを1つ戻す */
+< 						putfonts8_asc_sht(sheet, cursor_x, 28, COL8_FFFFFF, COL8_000000, " ", 1);
+< 						cursor_x -= 8;
+< 					}
+< 				} else {
+< 					/* 一般文字 */
+< 					if (cursor_x < 240) {
+< 						/* 一文字表示してから、カーソルを1つ進める */
+< 						s[0] = i - 256;
+< 						s[1] = 0;
+< 						putfonts8_asc_sht(sheet, cursor_x, 28, COL8_FFFFFF, COL8_000000, s, 1);
+< 						cursor_x += 8;
+< 					}
+< 				}
+< 			}
+< 			/* カーソル再表示 */
+< 			boxfill8(sheet->buf, sheet->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+< 			sheet_refresh(sheet, cursor_x, 28, cursor_x + 8, 44);

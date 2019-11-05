@@ -1,0 +1,2 @@
+19d18
+< 	*((int *) 0x0fec) = (int) &cons;

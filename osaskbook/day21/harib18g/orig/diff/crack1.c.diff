@@ -1,0 +1,7 @@
+1,2d0
+< void api_end(void);
+< 
+6c4
+< 	api_end();
+---
+> 	return;

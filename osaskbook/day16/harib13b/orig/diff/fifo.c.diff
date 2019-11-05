@@ -1,0 +1,12 @@
+7c7
+< void fifo32_init(struct FIFO32 *fifo, int size, int *buf, struct TASK *task)
+---
+> void fifo32_init(struct FIFO32 *fifo, int size, int *buf)
+16d15
+< 	fifo->task = task; /* データが入ったときに起こすタスク */
+34,38d32
+< 	if (fifo->task != 0) {
+< 		if (fifo->task->flags != 2) { /* タスクが寝ていたら */
+< 			task_run(fifo->task); /* 起こしてあげる */
+< 		}
+< 	}

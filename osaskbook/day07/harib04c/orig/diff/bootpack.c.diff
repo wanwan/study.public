@@ -1,0 +1,17 @@
+12c12
+< 	int mx, my, i, j;
+---
+> 	int mx, my, i;
+32c32
+< 		if (keybuf.next == 0) {
+---
+q> 		if (keybuf.flag == 0) {
+35,39c35,36
+< 			i = keybuf.data[0];
+< 			keybuf.next--;
+< 			for (j = 0; j < keybuf.next; j++) {
+< 				keybuf.data[j] = keybuf.data[j + 1];
+< 			}
+---
+> 			i = keybuf.data;
+> 			keybuf.flag = 0;

@@ -1,0 +1,21 @@
+5,6c5
+< struct FIFO32 *mousefifo;
+< int mousedata0;
+---
+> struct FIFO8 mousefifo;
+11c10
+< 	int data;
+---
+> 	unsigned char data;
+15c14
+< 	fifo32_put(mousefifo, data + mousedata0);
+---
+> 	fifo8_put(&mousefifo, data);
+22c21
+< void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec)
+---
+> void enable_mouse(struct MOUSE_DEC *mdec)
+24,26d22
+< 	/* 書き込み先のFIFOバッファを記憶 */
+< 	mousefifo = fifo;
+< 	mousedata0 = data0;

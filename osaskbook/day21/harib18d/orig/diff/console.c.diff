@@ -1,0 +1,14 @@
+260c260
+< 	char name[18], *p, *q;
+---
+> 	char name[18], *p;
+287d286
+< 		q = (char *) memman_alloc_4k(memman, 64 * 1024);
+291d289
+< 		set_segmdesc(gdt + 1004, 64 * 1024 - 1,   (int) q, AR_DATA32_RW);
+300c298
+< 		start_app(0, 1003 * 8, 64 * 1024, 1004 * 8);
+---
+> 		farcall(0, 1003 * 8);
+302d299
+< 		memman_free_4k(memman, (int) q, 64 * 1024);

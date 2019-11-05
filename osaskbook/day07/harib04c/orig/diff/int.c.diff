@@ -1,0 +1,8 @@
+37,39c37,39
+< 	if (keybuf.next < 32) {
+< 		keybuf.data[keybuf.next] = data;
+< 		keybuf.next++;
+---
+> 	if (keybuf.flag == 0) {
+> 		keybuf.data = data;
+> 		keybuf.flag = 1;

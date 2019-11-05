@@ -1,0 +1,21 @@
+5,6c5
+< struct FIFO32 *keyfifo;
+< int keydata0;
+---
+> struct FIFO8 keyfifo;
+10c9
+< 	int data;
+---
+> 	unsigned char data;
+13c12
+< 	fifo32_put(keyfifo, data + keydata0);
+---
+> 	fifo8_put(&keyfifo, data);
+33c32
+< void init_keyboard(struct FIFO32 *fifo, int data0)
+---
+> void init_keyboard(void)
+35,37d33
+< 	/* 書き込み先のFIFOバッファを記憶 */
+< 	keyfifo = fifo;
+< 	keydata0 = data0;

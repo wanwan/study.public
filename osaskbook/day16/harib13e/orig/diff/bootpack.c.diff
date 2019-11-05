@@ -1,0 +1,6 @@
+54d53
+< 	task_run(task_a, 1, 2);
+79c78
+< 		task_run(task_b[i], 2, i + 1);
+---
+> 		task_run(task_b[i], i + 1);

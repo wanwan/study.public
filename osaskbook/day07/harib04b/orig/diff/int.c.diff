@@ -1,0 +1,19 @@
+30,31d29
+< struct KEYBUF keybuf;
+< 
+34c32,33
+< 	unsigned char data;
+---
+> 	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
+> 	unsigned char data, s[4];
+37,40c36,40
+< 	if (keybuf.flag == 0) {
+< 		keybuf.data = data;
+< 		keybuf.flag = 1;
+< 	}
+---
+> 
+> 	sprintf(s, "%02X", data);
+> 	boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);
+> 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
+> 

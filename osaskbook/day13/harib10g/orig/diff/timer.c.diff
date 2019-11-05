@@ -1,0 +1,8 @@
+46c46
+< void timer_init(struct TIMER *timer, struct FIFO32 *fifo, int data)
+---
+> void timer_init(struct TIMER *timer, struct FIFO8 *fifo, unsigned char data)
+93c93
+< 		fifo32_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);
+---
+> 		fifo8_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);

@@ -1,0 +1,37 @@
+261d260
+< 	struct TASK *task = task_now();
+291,292c290,291
+< 		set_segmdesc(gdt + 1003, finfo->size - 1, (int) p, AR_CODE32_ER + 0x60);
+< 		set_segmdesc(gdt + 1004, 64 * 1024 - 1,   (int) q, AR_DATA32_RW + 0x60);
+---
+> 		set_segmdesc(gdt + 1003, finfo->size - 1, (int) p, AR_CODE32_ER);
+> 		set_segmdesc(gdt + 1004, 64 * 1024 - 1,   (int) q, AR_DATA32_RW);
+301c300
+< 		start_app(0, 1003 * 8, 64 * 1024, 1004 * 8, &(task->tss.esp0));
+---
+> 		start_app(0, 1003 * 8, 64 * 1024, 1004 * 8);
+311c310
+< int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax)
+---
+> void hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax)
+314d312
+< 	struct TASK *task = task_now();
+322,323d319
+< 	} else if (edx == 4) {
+< 		return &(task->tss.esp0);
+325c321
+< 	return 0;
+---
+> 	return;
+328c324
+< int *inthandler0d(int *esp)
+---
+> int inthandler0d(int *esp)
+331d326
+< 	struct TASK *task = task_now();
+333c328
+< 	return &(task->tss.esp0);	/* ˆÙíI—¹‚³‚¹‚é */
+---
+> 	return 1; /* ˆÙíI—¹‚³‚¹‚é */
+334a330
+> 

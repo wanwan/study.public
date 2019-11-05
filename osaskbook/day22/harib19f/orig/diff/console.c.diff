@@ -1,0 +1,16 @@
+319,325d318
+< 	struct SHTCTL *shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
+< 	struct SHEET *sht;
+< 	int *reg = &eax + 1;	/* eax‚ÌŽŸ‚Ì”Ô’n */
+< 		/* •Û‘¶‚Ì‚½‚ß‚ÌPUSHAD‚ð‹­ˆø‚É‘‚«Š·‚¦‚é */
+< 		/* reg[0] : EDI,   reg[1] : ESI,   reg[2] : EBP,   reg[3] : ESP */
+< 		/* reg[4] : EBX,   reg[5] : EDX,   reg[6] : ECX,   reg[7] : EAX */
+< 
+334,340d326
+< 	} else if (edx == 5) {
+< 		sht = sheet_alloc(shtctl);
+< 		sheet_setbuf(sht, (char *) ebx + ds_base, esi, edi, eax);
+< 		make_window8((char *) ebx + ds_base, esi, edi, (char *) ecx + ds_base, 0);
+< 		sheet_slide(sht, 100, 50);
+< 		sheet_updown(sht, 3);	/* 3‚Æ‚¢‚¤‚‚³‚Ítask_a‚Ìã */
+< 		reg[7] = (int) sht;

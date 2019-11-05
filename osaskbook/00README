@@ -1,0 +1,518 @@
+
+* "30日でできる!OS自作入門" を Linux base で実装してみる
+
+** 大昔に同様のことをベースにして自作OS作っているが以前のコードがふっとんだ過去サーバの中で
+   バックアップ見つけられなかったのでやりなおし.
+
+** 基本的なルールは linux 上で作れること, 作者謹製のツール群ではなく GNU 系の普通の linux
+   環境にはいっているものでなんとかできるようにしておくこと
+
+** とりあえず, Arch Linux で作成している. (201804位の環境で動作させている)
+
+* chapter 1.
+
+** helloos1.img は基本写経. disk image として先頭 1sect あればよい.
+   MBR に画面に "hello world" を出させているだけなので. sector 0 として 512byte が先頭にあって
+   あとは適当, という感じになっていれば, qemu で -fda xxx.img というようにしてやれば作者の
+   やりたい画面にだす, という感じになる.
+
+   $ dd if=/dev/zero of=xxx.img bs=512 count=yyy
+
+   という形で作成して, 作者の本のとおりに binary editor で写経してやればよい.
+   1.44MB floppy なら yyy は 2880.
+   
+   ちなみに MBR 形式は,  http://thestarman.pcministry.com/asm/mbr/PartTables.htm あたりを
+   参照のこと.
+
+   hello1 は写経で binary, hello2 で db(.byte) でそのまま作成. objcopy と, gas で, static で
+   通常の bootstrap 類(stdlib なし, crt0.o なし) はずして build, elf 形式で作成したものを
+   所謂 plain binary にして dd の 1st sector にコピーしてやればよい.
+
+   微妙にはまったのは, どうも今の elf には先頭に build-id という形のセクションがはさまっている
+   っぽいので, --build-id=none という形で抜いてやる必要がある.
+   (readelf で確認すれば .text の前に変なのがいるのが見れる)
+
+   assembler の対応については, 似たようなことやっているのか,
+   http://miettal.hatenablog.com/entry/20120603/1338729542
+   が参考になる. 細かい話として .org は (相対/絶対) アドレスを対象としているので nasm の
+   resb のような記法ができない模様 (addr-. といった書き方では怒られた) ので MBR 終端の
+   2byte までのアドレスで記述している.
+
+* chapter2
+   MBR の天下りで与えていたバイト部を code にして対応する.
+   注意するのは MBR は, memory の 0x7c00 になるので, 相対アドレス命令か 0x7c00 をベースアドレス
+   とする形にする必要がある.
+   NASM の ORG 命令と違い GAS では LD のリンカスクリプトで .text の起点アドレスを指定する、という
+   形でこのように実現できる.
+   リンカスクリプトとセクションの記述については,
+   http://draft.scyphus.co.jp/osdev/boot02.html
+   を参考.
+
+   他, アセンブラ等の忘備録
+   https://ja.wikibooks.org/wiki/X86%E3%82%A2%E3%82%BB%E3%83%B3%E3%83%96%E3%83%A9/GAS%E3%81%A7%E3%81%AE%E6%96%87%E6%B3%95
+   http://capm-network.com/?tag=GAS_%E5%9F%BA%E6%9C%AC%E6%96%87%E6%B3%95
+   http://www.bravegnu.org/gnu-eprog/lds.html
+   https://sourceware.org/binutils/docs/ld/Simple-Example.html
+
+   微妙にはまったのが,
+   
+   movw $msg, %si
+
+   の部分. label は, address の即値に展開、という理解だったのだが,
+
+   movw msg,%si
+
+   と別のコードを掃くようで, はまった. とりあえず, dd で切った断片を objdump で disassemble する限り
+
+   $ objdump -b binary -m i386 -Maddr16,data16  -D test.bin
+
+   c:   8b 36 75 7c             mov    0x7c75,%si
+
+   c:   be 74 7c                mov    $0x7c74,%si (<-- こっちが正解)
+
+   という感じで, cmd <addr> (アドレスがずれるのは, 命令調が変化しての 1byte 分なので問題なし)
+   になっており, 同じ命令として見えているがどうも, 8b の方 (movw msg, %si) は想定外の
+   何かに変換されているらしい. 詳細は不明. 時間ができたら調べる.
+
+   Makefile 関連は書籍読んで適当に. オリジナルのものとは少し異なる.
+
+* chapter3
+   harib00a
+   floppy イメージの読み込み.
+   書籍では確認できない、とあるが, dummy.bin を /dev/urandom から 512byte 作成して
+   sector 2 に追加. 該当処理を -fda disk.bin 的に qemu で与えた上で,
+   qemu に -s を与えて起動.
+   localhost に target remote localhost:1234 という形で gdb -> qemu と行なうことで
+   gdb からメモリをダンプ.
+   x/512xb 0x8200 としてやれば dummy.bin と一致するものが見えるので確認可.
+
+   ただし, architecture 等で i8086 にしてdisassemble 等を確認したかったが
+   何故かどうさしない. qemu が x86_64 のせいか? (i386 は glibc がたりないのか動作しない)
+
+   harib00b
+   たぶん実質的に機能していない retry.
+
+   harib00c
+   512byte ごとの chunk を適当に作成。
+   gdb で x/256xb として 0x8200..0x8400..0x8600 という形で helloos.img の hex がはいっている
+   ことを確認することで書籍は流しているがプログラム的に動作しているだろうことは確認できる.
+
+   harib00d
+   macro を使用するために build を gcc に変更.
+   ipl.bin が 64bit elf とかいってしまうが, build して走るのでたぶん中身は 16bit code だと思う.
+   objdump で適当に見る限りなんとなく 16bit のコードっぽいので ".code16" の宣言が効いている
+   のと、gcc の elf pack の問題ではないか? (そもそも elf に 16bit ってあるの?)
+   とりあえず 0x8200, 0x8400 あたりが乱数になっているのを確認. ロードした全セクタはみていない.
+
+   harib00e
+   fat fs に sect0 ipl, fat の先頭に kernel img というモデルを実現.
+   binary 自体はソース分割して二つ make, あとは bs=512 count=2880 な loopback img を作成して
+   mkfs.fat でファイルシステムにして先頭に ipl, File system に kernel を copy で作成.
+   書籍の言い分では, 0x2600 が superblock (fat) の先頭, 0x4200 が copy したときのファイルの実体
+   の格納場所で, 0x8200 にセクタ2からロードして 0xc200 にファイルの先頭がロードされるだが,
+   見ると, 0x2600 が superblock (fat) の先頭, 0x4400 が copy したときのファイルの実体
+   の格納場所で, 0x8200 にセクタ2からロードして 0xc400 にファイルの先頭がロードされる、となる.
+   "0x8200 + 0x4400 - 0x200 (セクタ2 からなので)" なので, こちらのほうが正しいような気がする
+   のだが...
+   例によって起動, gdb->qemu で x/256xb 0xc400 で hlt のコードが 0xc200 にロードできているので
+   動き自体は問題ないのを確認
+   # FAT の作成を Linux の適当な mkfs でやっているがオリジナルのIPL は FAT12 とあるのでこのあたり
+   のせいかも.
+
+   harib00f
+   code の text 先頭を 0xc400 に. jmp 0xc400 を足す. 例によって正しく動作しているか不明..
+   どうも jmp 命令で記述すると gdb で接続されたときのアドレスが奇妙.
+   色々みたが, ljmp $0, $0xc400 で正しい模様.
+   http://csiflabs.cs.ucdavis.edu/~ssdavis/50/att-syntax.htm あたり参照
+   この状態で, gdb 接続すると,
+
+   (gdb) target remote localhost:1234
+   Remote debugging using localhost:1234
+   warning: No executable has been specified and target does not support
+   determining executable automatically.  Try using the "file" command.
+   0x000000000000c401 in ?? ()
+
+   で
+
+   (gdb) x/256xb 0xc400
+   0xc400: 0xf4    0xeb    0xfd    0x00    0x00    0x00    0x00    0x00
+   0xc408: 0x00    0x00    0x00    0x00    0x00    0x00    0x00    0x00
+
+   なのでただしいっぽい.
+   # jmp 0xc200 だと何故か上手くいくが, ひょっとして相対アドレスで jmp して不正規命令でよみとばし
+   たりしてる?
+
+   harib00g
+   memory に CYLS 書いて, 画面を黒くぬった. 黒くぬるのは int 命令だけなのですぐ.
+   今迄 gdb + qemu で見ていたが画面で見れるようになる. memory も x/128xb 0x0ff0 とかやると先頭に 0x0a
+   が確認できる.
+
+   harib00h
+   変数代わりに 0x0ff0 近辺に色々保存. 例によって gdb で確認.
+   keyboard LED は 0 がはいっているっぽいが何と関連してどうはいっていればよいか分からないのでそのまま.
+
+--
+   harib00i
+   ちょっと色々忘れているのでリハビリがてら.
+   ipl.bin の dump みていて 0x200 になんかいるが、ipl という意味ではたぶん間違い.
+   調べると, elf の ".note.gnu.property" とかいう section がいて, そのまま objcopy でもってかれている
+   っぽいので strip で削除.  
+
+   disassemble raw binary 
+   $ objdump -D -b binary -mi386 helloos.img
+
+   gdb接続.
+   OS 側を
+   
+   $ qemu-system-x86_64 -fda $(IMG) -s -S
+
+   で起動. gdb 側を, 起動して
+
+   (gdb) target remote localhost:1234
+   (gdb) set architecture i386:x86-64
+
+   で接続 (architecture は何によるのか良くわからんが, とりあえず, ダメなやつだとエラーがでるのでこれで)
+
+   memory load は 0x7c00. ie. gdb で x/256i 0x00007c00 で ipl.bin が map されるのが確認できる.
+      
+--
+   やっぱり良くわからん、というか殆ど記憶の彼方なので sec 3 やりなおし. (sec3_2)
+   
+   harib00a
+   ipl.S から sect2 以降を 0x8200 に load する.   
+   make run で動作するが, 確認できることとしては二つ.
+   ひとつは load 先(0x8200) にデータがある. これは gdb -> qemu で接続して
+   x/256xb 0x8200 とすればよい.
+   od -Ax -tx1z helloos.img の内容の先頭を random でジェネっているが, これと
+   同じものがあることが dump できる.
+   また接続時の address が 0x7c73 になる.
+   x/256i 0x7c00 とやればわかるが 0x7c72 に hlt が配置されている.
+   このため pc が hlt +1 にいって命令的には hlt にいるのだろうと推測できる。
+   ちなみに 0x7c73 は jmp 0x7c72. なので. ipl.S の fin で廻っている、ということになる.
+
+   harib00b
+   pc のアドレスが binary の増分にしたがって 0x7c86 に移動しているがそれ以外の
+   挙動は harib00a と同じ.
+
+   harib00c
+   18sect までの繰り返しが追加されているだけ.
+   それに伴って hlt の位置が 0x7c95 に移動しており PC がそのあたりになる
+   memory は set logging on で gdb.txt に落とせるので od の binary と比較.
+   0x200 ごとに見比べて 0x82000-xa3ff まで の範囲で (0x2200)=(0x200*17)
+   copy されていることが確認できる.
+
+   harib00d
+   本質ではないがいくつか.
+   まず dummy の分を harib00c でもそうだったが先頭しかつくってないので必要分作る.
+   CYLS マクロは gas では解釈してくれない(まあ冷静に考えればそうだ)ので gcc にする.
+   どうも gcc でやると, elf で後ろに ".note.gnu.property" を足してしまうっぽいので
+   strip を追加.
+   $pc は 0x7ca9. hlt と jmp の位置でいつもどおり.
+   c10 までは大きすぎるので, 0x2400 単位(0x200x18sect) でいくつか確認してロードできていそう.
+
+   harib00e
+   おそらくこのサンプルの本質的なはなしは kernel を FileSystem の下に置いて MBR ipl が
+   FileSystem の kernel を load, $PC を kernel 先頭に遷移させる, ということにある.
+   いろいろと分からないというか正解というかは色々分からないのだが, Floppy を相手にしている
+   場合の FAT12 の取扱は,
+   
+   MBR ... FAT (ROOT DIR)... DATA
+   
+   という形になって, この構成には partition の概念はない.
+   通常ならば MBR (sector#1) の 0xbe0 以降が partition table だが, これが空になっている
+   模様.
+   このため mkfs.fat で disk image のファイルで
+
+   $ mkfs.fat test.img
+
+   といったような形のやりかたをすることができる. (もっとも MBR 部は空というかおそらく画面に
+   "This is not a bootable disk... " といった文字列を出すだけのものとおもわれるものがはいっている.
+   このため, 今回作成している ipl 部のコードで上書くことで
+
+   起動IPL + FAT
+
+   という構成になると思われる.
+
+   FAT の format を見ると
+   http://elm-chan.org/docs/fat.html
+   で値を比べると 0x200(FATの先頭), 0x2600(ROOT DIR), 0x4400(コピーしたファイルの先頭)
+   であっているように見える.
+   (DIR のサイズの計算値は MBR(IPL) の設定値からの計算で, 途中小数点になる.
+   繰下げなら 0x200 小さくできそうではある)
+
+   このコード自体は 0xc400 (0x8000+0x4400) に haribote の先頭 "f4 eb fd" がある、ということ
+   の確認と, フローとして IPL と ファイルシステム+kernel を分割した、という意味以上はないと
+   思う.
+   例によって, PC は hlt - jmp のアドレス
+   0xc400 は,
+
+   (gdb) x/256xb 0xc400
+   0xc400: 0xf4    0xeb    0xfd    0x00    0x00    0x00    0x00    0x00
+
+   harib00f
+   前述の harib00e に ljmp 0xc400 を加算して, 0xc400 近辺にある "f4 eb fd" で停止している
+   ことが確認できる版.
+   微妙に Make 関連でファイルシステム上のファイルの位置とか load 場所とかがずれていたっぽい
+   のできっちり strip 等しておくようにした.
+
+   PC は 0xc401 で hlt/jmp の組にいるのが確認できる.
+
+   harib00g
+   kernel 部に VGA 切り替え用の INT 10 を置いただけ.
+   memory 的には,
+
+   0x000000000000c407 in ?? ()
+   (gdb) x/10i 0xc400
+      0xc400:      mov    $0x13,%al
+      0xc402:      mov    $0x0,%ah
+      0xc404:      int    $0x10
+      0xc406:      hlt    
+   => 0xc407:      jmp    0xc406
+
+   となっており, 0xc400 近傍に今回の binary が load され, かつ その直後の hlt で止まっていること
+   が分かる.
+
+   harib00h
+   基本あまり替わらない.
+   kernel 側で, 0x0ffx のアドレスにいくつかの値を覚えることが追加されている.
+   architecture が一致しないのか PC 近辺の disassemble が綺麗に決まらないが, アドレスのおおまかな
+   位置は間違っていない.
+
+   追加として, 0x0ff0 近傍のアドレスに VMODE 以下値がはいっていることを確認できる.
+   (gdb) x/32xb 0x0ff0
+   0xff0:  0x0a    0x00    0x08    0x00    0x40    0x01    0xc8    0x00
+
+   ----
+   harib00i
+
+   実質仕切り直し. 原著はここの項目は説明は実質ない (後ろで説明という形)
+   やっていることは 要は 32bit mode への遷移と kernel にみたてた binary への $PC の移動.
+   32bit プロテクトモードへの遷移は30日本では後ろにすっとばしているが, おおざっぱに
+   
+   1. register とかの設定
+   2. 自身へのjmp
+   
+   で 32bit への遷移になる. このあたりは 30日本のここを読むより ASCII の
+   "Linux のブートプロセスを見る" を読むほうが詳細かもしれない.
+   纏められている, real mode -> protect mode のフローは以下の通り. (@sec 1.2.6)
+
+   1. GDT の作成
+   2. GDT レジスタの設定
+   3. IDT の作成
+   4. IDT レジスタの設定
+   5. A20 マスクの解除
+   6. CPU への割り込みの禁止
+   7. CR0 レジスタの最下位ビットをセット
+   8. パイプラインの内容をフラッシュ
+   9. セグメントレジスタを設定
+
+   ちなみに, "Linuxの.." は grub 2.0.0-beta4 を対象にしている.
+   (なぜか git の branch/tag にこの version はないが..)
+
+   # 前の版のやつは Linux kernel 2.x の boot 部
+
+   ipl.S については差分はない. haribote.nas -> asmhead.nas と bootpack.c に
+   分割して kernel を作成している.
+
+   今回 IDT は仕様しない. また, 上記で 1-9 と書いているが, 実際は, {6, 1, 2, 7, 8, 9}
+   という形で 1set という感じ. A20 マスクは 32bit に対しての方とは若干独立している
+   感じ.
+   注意するのは 8249A (割り込みコントローラチップ) は歴史的な事情からか、空いている
+   リソースということで キーボードコントローラにつなげたみたいなので命令が微妙
+   になっている。このあたりはコードにコメントしているので参考.
+
+   オリジナルのコードは, 486 命令を有効にしたうえで, CR0 を設定して jmp になっている
+   がこのコードはおかしいのではないかと思う.
+   nasm の書式は jmp でアドレスの指定の仕方で far/near をコントロールしているが
+   このやりかたでは near で CS は変更されない.
+   (実際 near でも動作するっぽいのだが)
+   intel の manual は far jmp を要求している。他のコード等の色々なコメントやCPUの機構等
+   総合して考えると
+   (https://www.intel.co.jp/content/dam/www/public/ijkk/jp/ja/documents/developer/IA32_Arh_Dev_Man_Vol3_i.pdf
+   pg 379)
+   
+   * CPU pipeline flush
+   * CS レジスタを real/protect mode で扱いが違うことから設定する
+   
+   の二つを要求しての行為だと思うので,  far jmp でないと奇妙である.
+   他方, オリジナルのコードでは, segment を
+
+   * 0000 0000 - FFFF FFFF の 4GB r/w data segment
+   * 0x00280000 - (512KB) executable code segment
+
+   の二つしかあたえていない.
+
+   ljmp 後のコードは実行可能セグメント上で, 32bit コードが実行される、と考えるのが合理的で
+   あるが, ここで実行可能セグメントは
+   後者の code になる. 一方でこのセグメントは上述の通り 0x00280000 近辺の 512KB であるが,
+   PC は ljmp 後 0xc400 近辺にいる.
+   この状態だとどうも segment 外で動作はするっぽいのだが, code を 16bit のものと思っている
+   のではないか、と思われる挙動をして, 以降の %ds, %es.. といったセグメントレジスタの初期化
+   コードが正しく動作しない.
+   (実際, この問題は セグメント位置/サイズを 0x0000 0000 - (1MB) としてやったりすると解決する..
+   おそらく, セグメントの D/B flag(16/32bitの設定) はセグメントの範囲にだけ有効になっているの
+   だと思われる)
+
+   このことから実行可能なセグメントの方の設定を 0x0000 0000 - (1MB) という形で新規に興し
+   ljmp 後は、このセグメントを使用するようにしている.
+
+   memcpy は単純なメモリ間転送なのでそのまま.
+   最後に再度 bim 形式の binary からデータをコピーしているが今回は linux で binary を
+   使用しているので本部分はコメントアウト
+   替わりといってはなんだが binary は primitive なものを作成するために -m32 -fno-pic -fno-asynchronous-unwind-tables
+   で build して elf -> binary にしている.
+   
+   これで起動後 jmp 先で 0x00280000 + 3 あたりの jmp 命令にいつづけることが確認できる.
+   (qemu の ctrl+alt+2 で terminal モードにして info registers で pc (eip) が 0x00280003 になることを
+   p確認)
+
+
+   harib00j
+
+   基本的に harib00i と同じ.
+   hlt を呼ぶためだけに assembler を作成して symbol 宣言して, link したものを binary にしている.
+   qemu で eip が 0x0028000e (asm の ret のあたり) にいるのを確認.
+
+   ちなみにどうも C で外部参照名の先頭に "_" をつける、という伝統はなくなった模様.
+   gcc (GCC) 8.2.1 20181127
+   ではすでにないらしい. libc の中身にもついていないし hello world うってみてもついていないので
+   いつのまにか変わったらしい.
+
+---
+* chapter 4
+  基本 VGA にたいしての書き込みの話題.
+  VRAM の領域が memory mapped なのでここを適当に書くだけ.
+  あとはちょっと palette とか C の話なのであまり目新しいということではない.
+  さらっと流す.
+
+  harib01a
+  VRAM 領域が 0xa0000 から 0xaffff までの 320x240 で, 4bit palette で設定できるので
+  その間を廻して設定している.
+  設定する palette 値は 15 で結果画面は白.
+
+  harib01b
+  画面描画時に 0x0f でマスクしているので. 書き込みが x 座標毎に 0..15 になる
+  だけ. 320/16=20 で割り切れるので 20 回の繰り返しをやることになる.
+  結果画面にはしましま線がでることになる.  
+
+  harib01c
+  pointer の説明を付与して, 実は C 言語のレベルでのアドレス対しての書き込みができる、
+  という形の説明を付与して assembler からの特定アドレス書き込みを C の bootpack.c で
+  完結させるように.
+  基本挙動は harib01b と同じ。
+
+  harib01d
+  harib01c を 配列というか配列の展開後のアドレス記法で書き直したもの.
+
+  harib01e
+  harib01d と同じ. アドレス指定を配列記法で書いてみせただけのもの.
+
+  harib01f
+  palette を設定するように io port アクセス用アセンブラを追加.
+  gas の場合 pushfd/popfd ではなく pushfl/popfl なので注意
+
+  harib01g
+  矩形描画用関数を追加. 用は特定範囲のぬりつぶし.
+
+  harib01h
+  矩形描画用関数を使用して windows のスタートメニュー的なものを画面に書き出し.
+
+---
+* chapter5
+
+  harib02a
+  asmhead でメモリ領域に画面情報を書いて, アドレス指定したポインタ経由で
+  該当の値を取得する、というようなコードの整理.
+  あとは画面描画関数が長いので init_screen に分割.
+
+  harib02b
+  BOOTINFO struct を追加して video 関係の変数をまとめている.
+  asmhead で予約した連続メモリ領域を struct で被せる、というよくある H/W の
+  扱いをもってきた感じ。 optimize に関連する問題があるといやなので volatile だけ
+  足しておいた.
+
+  harib02c
+  harib02b を -> 矢印記法で構造体アクセスさせるようにしたもの.
+
+  harib02d
+  8x16 の "A" bitmap を描いてみるルーチンの追加
+
+  harib02e
+  osask のは間に一段なにかスクリプトがいるっぽいので, 代わりに font は
+  linux-2.6.39/drivers/video/console/ のものを改変して使用.
+  適当に object を作成してひっつける.
+  先頭のいくつかの font が osask のものと違うようだが, 基本フォーマットは同じで 0x30 以降
+  については ascii として同じにみえるのでこれで実用に耐えると思われる.
+  何故か volatile 修飾していると warning を大量に出されるようになったので (char *) については
+  キャストしてある.
+
+  harib02f
+  02e の一文字出力をまとめて, 文字列出力にしたものを追加
+
+  harib02g
+  OS 的には変数を sprintf で画面に書かせる、というもの.
+  当然, libc に依存するのはおかしなはなしなので通常の意味では sprintf はないはず.
+  sprintf を作成するのに少し手間どる.
+  srpintf はオレオレ実装する気力がなかったので, google 先生に聞いて一番最初に発見した
+  http://bttb.s1.valueserver.jp/wordpress/blog/2017/12/17/makeos-5-2/
+  にあるものをいただく.
+  実装の中身は見ていないのであれだが, libc 関連の他の musl とかいろいろあるやつから
+  上手く依存関係を切るのは手間そうなのでまた別の機会に.
+  
+  https://wiki.osdev.org/C_Library
+  一応ここに役にたちそうなのがあるので時間があれば移植を考える. いくつかは移植用のレイヤ
+  として下段を持つものがあるっぽいのでなんとかなるのかも.
+
+  むしろ厄介なのは build option の方. -fno-pie ... はどうも stack 関係の check routine?
+  っぽいのを一緒にリンクしようとして転けるのをふせぐのに, -fno-builtin は sprintf が
+  builtin でもっているっぽいのでそれとの conflict を避けるために追加.
+    
+  harib02h
+  mouse cursor 描画ルーチンの追加.
+  font と実質同じ.
+
+  harib02i
+  gdt/idt を APL レベルから設定する.
+  この段階での設定は, C layer からの設定ができること、と IDT も設定する、という二点
+  しか相違はない.
+  一応メモリ構造を確保して addr で渡す、ということなので構造体には volatile を付与
+  してある.
+  48bit のアドレスは調べていないが assembler のの類似を考えると 0xXX XX (length) AA AA AA AA
+  という構造の先頭を渡す、ということなのだと思う.
+  load_idt/load_ldt で無理矢理この形にして渡している、と思われる.
+  IDT はこの段階では初期化以上のことはやっていないので設定のはしり以上のことにはなっていない.
+  LDT の構造は sec 3 の時に書いているのでここでは割愛。
+  0x00280000 から 512KB になっているが, この段階では 280000 以降のアドレスで動作しているので
+  問題はない模様.
+
+---
+* chapter6
+
+  harib06ab
+  bootpack.c を bootpack.c, dsctbl.c, graphics.c に分割.
+  Makefile に suffix 記法を追加して generic なルールで build できるように修正.
+  基本的にコードの整理なので一括でやってしまう.
+  HariMain() が呼べているのはおそらく binary にするときに 先頭にいる、という特性ではないか
+  と思うのでこのあたりなんとかするべきとは思う...
+
+  harib06c
+  bootpack.h に色々分類.
+  LIMIT 変数等をサイズで保持しているのでちょっと注意.
+
+  harib06d
+  割り込み廻りを追加している. (実際には handler 処理は harib06e にいるっぽいのでこの
+  段階はまだ途中)
+  build して通常どおりあがることぐらいしかみていない.
+
+  harib06e
+  int handler でキャッチして色々表示
+  disassemble の出力が x64 のものになっている、とか set architecture が 32bit に
+  ならんな、とかはどうも qemu の問題っぽい.
+  というより, 呼んでいる qemu が x64 だったのが原因っぽい. i386 のものを呼べば
+  とりあえずそれっぽい binary の disassemble が表示される. なんかまだ違うっぽい
+  けどとりあえず前進したっぽいのでそのまま.
+
+  mouse が動作しない問題. code だけ読んでいたがどうも本のほうにこの example では
+  まだ動作しない、という記述が...
+  なんてこったい. とりあえず現状で放置して sec 6 は終わる.
+

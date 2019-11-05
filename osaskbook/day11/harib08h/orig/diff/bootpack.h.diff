@@ -1,0 +1,4 @@
+151c151
+< 	unsigned char *vram, *map;
+---
+> 	unsigned char *vram;

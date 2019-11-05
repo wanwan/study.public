@@ -1,0 +1,14 @@
+32c32
+< 		if (keybuf.len == 0) {
+---
+> 		if (keybuf.flag == 0) {
+35,40c35,36
+< 			i = keybuf.data[keybuf.next_r];
+< 			keybuf.len--;
+< 			keybuf.next_r++;
+< 			if (keybuf.next_r == 32) {
+< 				keybuf.next_r = 0;
+< 			}
+---
+> 			i = keybuf.data;
+> 			keybuf.flag = 0;

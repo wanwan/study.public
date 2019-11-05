@@ -1,0 +1,14 @@
+262,263d261
+< 	struct SHTCTL *shtctl;
+< 	struct SHEET *sht;
+303,310d300
+< 			shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
+< 			for (i = 0; i < MAX_SHEETS; i++) {
+< 				sht = &(shtctl->sheets0[i]);
+< 				if (sht->flags != 0 && sht->task == task) {
+< 					/* ƒAƒvƒŠ‚ªŠJ‚«‚Á‚Ï‚È‚µ‚É‚µ‚½‰º‚¶‚«‚ğ”­Œ© */
+< 					sheet_free(sht);	/* •Â‚¶‚é */
+< 				}
+< 			}
+346d335
+< 		sht->task = task;

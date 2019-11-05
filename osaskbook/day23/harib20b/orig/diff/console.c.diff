@@ -1,0 +1,5 @@
+359,362d358
+< 	} else if (edx == 11) {
+< 		sht = (struct SHEET *) ebx;
+< 		sht->buf[sht->bxsize * edi + esi] = eax;
+< 		sheet_refresh(sht, esi, edi, esi + 1, edi + 1);

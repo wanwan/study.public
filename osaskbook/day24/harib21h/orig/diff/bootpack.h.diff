@@ -1,0 +1,8 @@
+179,180c179
+< 	unsigned int timeout;
+< 	char flags, flags2;
+---
+> 	unsigned int timeout, flags;
+196,197d194
+< int timer_cancel(struct TIMER *timer);
+< void timer_cancelall(struct FIFO32 *fifo);

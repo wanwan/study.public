@@ -1,0 +1,4 @@
+246c246
+< int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline);
+---
+> void cmd_hlt(struct CONSOLE *cons, int *fat);

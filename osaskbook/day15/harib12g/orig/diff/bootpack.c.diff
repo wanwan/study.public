@@ -1,0 +1,29 @@
+25c25
+< 	struct TIMER *timer, *timer2, *timer3;
+---
+> 	struct TIMER *timer, *timer2, *timer3, *timer_ts;
+62a63,65
+> 	timer_ts = timer_alloc();
+> 	timer_init(timer_ts, &fifo, 2);
+> 	timer_settime(timer_ts, 2);
+124d126
+< 	mt_init();
+133c135,138
+< 			if (256 <= i && i <= 511) { /* キーボードデータ */
+---
+> 			if (i == 2) {
+> 				farjmp(0, 4 * 8);
+> 				timer_settime(timer_ts, 2);
+> 			} else if (256 <= i && i <= 511) { /* キーボードデータ */
+285c290
+< 	struct TIMER *timer_put, *timer_1s;
+---
+> 	struct TIMER *timer_ts, *timer_put, *timer_1s;
+289a295,297
+> 	timer_ts = timer_alloc();
+> 	timer_init(timer_ts, &fifo, 2);
+> 	timer_settime(timer_ts, 2);
+308a317,319
+> 			} else if (i == 2) {
+> 				farjmp(0, 3 * 8);
+> 				timer_settime(timer_ts, 2);

@@ -1,0 +1,34 @@
+21d20
+< 		ctl->sheets0[i].ctl = ctl; /* 所属を記録 */
+87c86
+< void sheet_updown(struct SHEET *sht, int height)
+---
+> void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height)
+89d87
+< 	struct SHTCTL *ctl = sht->ctl;
+143c141
+< void sheet_refresh(struct SHEET *sht, int bx0, int by0, int bx1, int by1)
+---
+> void sheet_refresh(struct SHTCTL *ctl, struct SHEET *sht, int bx0, int by0, int bx1, int by1)
+146c144
+< 		sheet_refreshsub(sht->ctl, sht->vx0 + bx0, sht->vy0 + by0, sht->vx0 + bx1, sht->vy0 + by1);
+---
+> 		sheet_refreshsub(ctl, sht->vx0 + bx0, sht->vy0 + by0, sht->vx0 + bx1, sht->vy0 + by1);
+151c149
+< void sheet_slide(struct SHEET *sht, int vx0, int vy0)
+---
+> void sheet_slide(struct SHTCTL *ctl, struct SHEET *sht, int vx0, int vy0)
+157,158c155,156
+< 		sheet_refreshsub(sht->ctl, old_vx0, old_vy0, old_vx0 + sht->bxsize, old_vy0 + sht->bysize);
+< 		sheet_refreshsub(sht->ctl, vx0, vy0, vx0 + sht->bxsize, vy0 + sht->bysize);
+---
+> 		sheet_refreshsub(ctl, old_vx0, old_vy0, old_vx0 + sht->bxsize, old_vy0 + sht->bysize);
+> 		sheet_refreshsub(ctl, vx0, vy0, vx0 + sht->bxsize, vy0 + sht->bysize);
+163c161
+< void sheet_free(struct SHEET *sht)
+---
+> void sheet_free(struct SHTCTL *ctl, struct SHEET *sht)
+166c164
+< 		sheet_updown(sht, -1); /* 表示中ならまず非表示にする */
+---
+> 		sheet_updown(ctl, sht, -1); /* 表示中ならまず非表示にする */

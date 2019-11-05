@@ -1,0 +1,7 @@
+25d24
+< void asm_inthandler20(void);
+164,167d162
+< 
+< /* timer.c */
+< void init_pit(void);
+< void inthandler20(int *esp);

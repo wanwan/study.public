@@ -1,0 +1,7 @@
+166,169d165
+< struct TIMERCTL {
+< 	unsigned int count;
+< };
+< extern struct TIMERCTL timerctl;
+172d167
+< 

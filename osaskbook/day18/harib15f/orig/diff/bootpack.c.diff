@@ -1,0 +1,18 @@
+5d4
+< #include <string.h>
+384d382
+< 	int x, y;
+438c436
+< 					if (strcmp(cmdline, "mem") == 0) {
+---
+> 					if (cmdline[0] == 'm' && cmdline[1] == 'e' && cmdline[2] == 'm' && cmdline[3] == 0) {
+447,455d444
+< 					} else if (strcmp(cmdline, "cls") == 0) {
+< 						/* clsƒRƒ}ƒ“ƒh */
+< 						for (y = 28; y < 28 + 128; y++) {
+< 							for (x = 8; x < 8 + 240; x++) {
+< 								sheet->buf[x + y * sheet->bxsize] = COL8_000000;
+< 							}
+< 						}
+< 						sheet_refresh(sheet, 8, 28, 8 + 240, 28 + 128);
+< 						cursor_y = 28;

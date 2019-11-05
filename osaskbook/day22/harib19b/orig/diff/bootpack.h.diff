@@ -1,0 +1,4 @@
+27d26
+< void asm_inthandler0c(void);
+254d252
+< int *inthandler0c(int *esp);

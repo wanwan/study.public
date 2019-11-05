@@ -1,0 +1,8 @@
+7d6
+< int api_getkey(int mode);
+22,26d20
+< 	for (;;) {
+< 		if (api_getkey(1) == 0x0a) {
+< 			break; /* Enter‚È‚çbreak; */
+< 		}
+< 	}

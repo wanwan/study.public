@@ -1,0 +1,34 @@
+196d195
+< 						fifo32_put(&task_cons->fifo, 2); /* コンソールのカーソルON */
+202d200
+< 						fifo32_put(&task_cons->fifo, 3); /* コンソールのカーソルOFF */
+394c392
+< 	int i, fifobuf[128], cursor_x = 16, cursor_c = -1;
+---
+> 	int i, fifobuf[128], cursor_x = 16, cursor_c = COL8_000000;
+416,418c414
+< 					if (cursor_c >= 0) {
+< 						cursor_c = COL8_FFFFFF;
+< 					}
+---
+> 					cursor_c = COL8_FFFFFF;
+421,423c417
+< 					if (cursor_c >= 0) {
+< 						cursor_c = COL8_000000;
+< 					}
+---
+> 					cursor_c = COL8_000000;
+427,433d420
+< 			if (i == 2) {	/* カーソルON */
+< 				cursor_c = COL8_FFFFFF;
+< 			}
+< 			if (i == 3) {	/* カーソルOFF */
+< 				boxfill8(sheet->buf, sheet->bxsize, COL8_000000, cursor_x, 28, cursor_x + 7, 43);
+< 				cursor_c = -1;
+< 			}
+454,456c441
+< 			if (cursor_c >= 0) {
+< 				boxfill8(sheet->buf, sheet->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+< 			}
+---
+> 			boxfill8(sheet->buf, sheet->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);

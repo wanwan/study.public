@@ -1,0 +1,6 @@
+25d24
+< void load_tr(int tr);
+31d29
+< void taskswitch4(void);
+92d89
+< #define AR_TSS32		0x0089

@@ -1,0 +1,5 @@
+31c31,32
+< void farjmp(int eip, int cs);
+---
+> void taskswitch3(void);
+> void taskswitch4(void);

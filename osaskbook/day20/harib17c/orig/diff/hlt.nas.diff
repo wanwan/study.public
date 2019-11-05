@@ -1,0 +1,4 @@
+3c3
+< 		CALL    2*8:0xbe3
+---
+> 		CALL    0xbe3

@@ -1,0 +1,24 @@
+16c16
+< 	int mx, my, i;
+---
+> 	int mx, my, i, count = 0;
+61c61
+< 	make_window8(buf_win, 160, 52, "window");
+---
+> 	make_window8(buf_win, 160, 52, "counter");
+76a77,78
+> 		count++;
+> 
+79c81
+< 			io_stihlt();
+---
+> 			io_sti();
+86,88d87
+< 				if (i == 0x1e + 256) {
+< 					putfonts8_asc_sht(sht_win, 40, 28, COL8_000000, COL8_C6C6C6, "A", 1);
+< 				}
+123a123,124
+> 				sprintf(s, "%010d", count);
+> 				putfonts8_asc_sht(sht_win, 40, 28, COL8_000000, COL8_C6C6C6, s, 10);
+125a127
+> 				count = 0; /* ‘ª’èŠJŽn */

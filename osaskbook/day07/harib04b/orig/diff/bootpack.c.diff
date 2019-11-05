@@ -1,0 +1,29 @@
+6,7d5
+< extern struct KEYBUF keybuf;
+< 
+12c10
+< 	int mx, my, i;
+---
+> 	int mx, my;
+18,20d15
+< 	io_out8(PIC0_IMR, 0xf9); /* PIC1とキーボードを許可(11111001) */
+< 	io_out8(PIC1_IMR, 0xef); /* マウスを許可(11101111) */
+< 
+29a25,27
+> 	io_out8(PIC0_IMR, 0xf9); /* PIC1とキーボードを許可(11111001) */
+> 	io_out8(PIC1_IMR, 0xef); /* マウスを許可(11101111) */
+> 
+31,41c29
+< 		io_cli();
+< 		if (keybuf.flag == 0) {
+< 			io_stihlt();
+< 		} else {
+< 			i = keybuf.data;
+< 			keybuf.flag = 0;
+< 			io_sti();
+< 			sprintf(s, "%02X", i);
+< 			boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);
+< 			putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
+< 		}
+---
+> 		io_hlt();

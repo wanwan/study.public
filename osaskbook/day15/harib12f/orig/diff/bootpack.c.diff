@@ -1,0 +1,16 @@
+290,291c290,291
+< 	struct TIMER *timer_ts, *timer_put, *timer_1s;
+< 	int i, fifobuf[128], count = 0, count0 = 0;
+---
+> 	struct TIMER *timer_ts, *timer_put;
+> 	int i, fifobuf[128], count = 0;
+301,303d300
+< 	timer_1s = timer_alloc();
+< 	timer_init(timer_1s, &fifo, 100);
+< 	timer_settime(timer_1s, 100);
+320,324d316
+< 			} else if (i == 100) {
+< 				sprintf(s, "%11d", count - count0);
+< 				putfonts8_asc_sht(sht_back, 0, 128, COL8_FFFFFF, COL8_008484, s, 11);
+< 				count0 = count;
+< 				timer_settime(timer_1s, 100);

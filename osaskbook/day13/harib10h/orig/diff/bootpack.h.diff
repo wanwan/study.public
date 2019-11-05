@@ -1,0 +1,6 @@
+166d165
+< 	struct TIMER *next;
+173c172
+< 	struct TIMER *t0;
+---
+> 	struct TIMER *timers[MAX_TIMER];

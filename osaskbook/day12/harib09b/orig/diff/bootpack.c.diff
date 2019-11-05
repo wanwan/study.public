@@ -1,0 +1,9 @@
+13c13
+< 	unsigned int memtotal;
+---
+> 	unsigned int memtotal, count = 0;
+65c65,66
+< 		sprintf(s, "%010d", timerctl.count);
+---
+> 		count++;
+> 		sprintf(s, "%010d", count);

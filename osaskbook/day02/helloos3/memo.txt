@@ -1,0 +1,115 @@
+ruri:~/works/study/osaskbook/day2/helloos3 $ objdump -m i386 -b binary -D helloos.bin 
+
+helloos.bin:     file format binary
+
+
+Disassembly of section .data:
+
+00000000 <.data>:
+       0:       eb 4e                   jmp    0x50
+       2:       90                      nop
+       3:       48                      dec    %eax
+       4:       45                      inc    %ebp
+       5:       4c                      dec    %esp
+       6:       4c                      dec    %esp
+       7:       4f                      dec    %edi
+       8:       49                      dec    %ecx
+       9:       50                      push   %eax
+       a:       4c                      dec    %esp
+       b:       00 02                   add    %al,(%edx)
+       d:       01 01                   add    %eax,(%ecx)
+       f:       00 02                   add    %al,(%edx)
+      11:       e0 00                   loopne 0x13
+      13:       40                      inc    %eax
+      14:       0b f0                   or     %eax,%esi
+      16:       09 00                   or     %eax,(%eax)
+      18:       12 00                   adc    (%eax),%al
+      1a:       02 00                   add    (%eax),%al
+      1c:       00 00                   add    %al,(%eax)
+      1e:       00 00                   add    %al,(%eax)
+      20:       40                      inc    %eax
+      21:       0b 00                   or     (%eax),%eax
+      23:       00 00                   add    %al,(%eax)
+      25:       00 29                   add    %ch,(%ecx)
+      27:       ff                      (bad)  
+      28:       ff                      (bad)  
+      29:       ff                      (bad)  
+      2a:       ff 48 45                decl   0x45(%eax)
+      2d:       4c                      dec    %esp
+      2e:       4c                      dec    %esp
+      2f:       4f                      dec    %edi
+      30:       2d 4f 53 20 20          sub    $0x2020534f,%eax
+      35:       20 46 41                and    %al,0x41(%esi)
+      38:       54                      push   %esp
+      39:       31 32                   xor    %esi,(%edx)
+      3b:       20 20                   and    %ah,(%eax)
+      3d:       20 00                   and    %al,(%eax)
+        ...
+      4f:       00 b8 00 00 8e d0       add    %bh,-0x2f720000(%eax)
+      55:       bc 00 7c 8e d8          mov    $0xd88e7c00,%esp
+      5a:       8e c0                   mov    %eax,%es
+      5c:       8b 36                   mov    (%esi),%esi
+      5e:       75 7c                   jne    0xdc
+      60:       8a 04 83                mov    (%ebx,%eax,4),%al
+      63:       c6 01 3c                movb   $0x3c,(%ecx)
+      66:       00 74 09 b4             add    %dh,-0x4c(%ecx,%ecx,1)
+      6a:       0e                      push   %cs
+      6b:       bb 0f 00 cd 10          mov    $0x10cd000f,%ebx
+      70:       eb ee                   jmp    0x60
+      72:       f4                      hlt    
+      73:       eb fd                   jmp    0x72
+      75:       0a 0a                   or     (%edx),%cl
+      77:       68 65 6c 6c 6f          push   $0x6f6c6c65
+      7c:       2c 20                   sub    $0x20,%al
+      7e:       77 6f                   ja     0xef
+      80:       72 6c                   jb     0xee
+      82:       64 0a 00                or     %fs:(%eax),%al
+        ...
+     1fd:       00 55 aa                add    %dl,-0x56(%ebp)
+     200:       f0 ff                   lock (bad) 
+     202:       ff 00                   incl   (%eax)
+        ...
+    1400:       f0 ff                   lock (bad) 
+    1402:       ff 00                   incl   (%eax)
+
+
+
+
+ruri:~/works/study/osaskbook/day2/helloos3 $ dd if=./helloos.bin of=test2.bin skip=80 bs=1 count=52
+52+0 records in
+52+0 records out
+52 bytes copied, 0.000353303 s, 147 kB/s
+
+
+ruri:~/works/study/osaskbook/day2/helloos3 $ objdump -b binary -m i386 -Maddr16,data16  -D test.bin 
+
+test.bin:     file format binary
+
+
+Disassembly of section .data:
+
+00000000 <.data>:
+   0:   b8 00 00                mov    $0x0,%ax
+   3:   8e d0                   mov    %ax,%ss
+   5:   bc 00 7c                mov    $0x7c00,%sp
+   8:   8e d8                   mov    %ax,%ds
+   a:   8e c0                   mov    %ax,%es
+   c:   be 74 7c                mov    $0x7c74,%si
+   f:   8a 04                   mov    (%si),%al
+  11:   83 c6 01                add    $0x1,%si
+  14:   3c 00                   cmp    $0x0,%al
+  16:   74 09                   je     0x21
+  18:   b4 0e                   mov    $0xe,%ah
+  1a:   bb 0f 00                mov    $0xf,%bx
+  1d:   cd 10                   int    $0x10
+  1f:   eb ee                   jmp    0xf
+  21:   f4                      hlt    
+  22:   eb fd                   jmp    0x21
+  24:   0a 0a                   or     (%bp,%si),%cl
+  26:   68 65 6c                push   $0x6c65
+  29:   6c                      insb   (%dx),%es:(%di)
+  2a:   6f                      outsw  %ds:(%si),(%dx)
+  2b:   2c 20                   sub    $0x20,%al
+  2d:   77 6f                   ja     0x9e
+  2f:   72 6c                   jb     0x9d
+  31:   64 0a 00                or     %fs:(%bx,%si),%al

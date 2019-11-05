@@ -1,0 +1,2 @@
+26d25
+< 	set_gatedesc(idt + 0x20, (int) asm_inthandler20, 2 * 8, AR_INTGATE32);

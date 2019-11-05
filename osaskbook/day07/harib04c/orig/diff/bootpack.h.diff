@@ -1,0 +1,5 @@
+q80,81c80
+< 	unsigned char data[32];
+< 	int next;
+---
+> 	unsigned char data, flag;

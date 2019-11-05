@@ -1,0 +1,20 @@
+45,46d44
+< 	int j, x, y;
+< 	struct SHEET *sht;
+273,285c271,272
+< 						/* 左ボタンを押している */
+< 						/* 上の下じきから順番にマウスが指している下じきを探す */
+< 						for (j = shtctl->top - 1; j > 0; j--) {
+< 							sht = shtctl->sheets[j];
+< 							x = mx - sht->vx0;
+< 							y = my - sht->vy0;
+< 							if (0 <= x && x < sht->bxsize && 0 <= y && y < sht->bysize) {
+< 								if (sht->buf[y * sht->bxsize + x] != sht->col_inv) {
+< 									sheet_updown(sht, shtctl->top - 1);
+< 									break;
+< 								}
+< 							}
+< 						}
+---
+> 						/* 左ボタンを押していたら、sht_winを動かす */
+> 						sheet_slide(sht_win, mx - 80, my - 8);

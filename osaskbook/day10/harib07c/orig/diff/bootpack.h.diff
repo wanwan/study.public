@@ -1,0 +1,4 @@
+159c159
+< void sheet_refresh(struct SHTCTL *ctl, struct SHEET *sht, int bx0, int by0, int bx1, int by1);
+---
+> void sheet_refresh(struct SHTCTL *ctl);

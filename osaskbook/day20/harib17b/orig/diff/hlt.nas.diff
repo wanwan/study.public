@@ -1,0 +1,9 @@
+2,3d1
+< 		MOV		AL,'A'
+< 		CALL    0xbe3
+5,6c3,4
+< 		HLT
+< 		JMP		fin
+---
+> 	HLT
+> 	JMP fin

@@ -1,0 +1,9 @@
+34c34
+< void asm_hrb_api(void);
+---
+> void asm_cons_putchar(void);
+241,242d240
+< void cons_putstr0(struct CONSOLE *cons, char *s);
+< void cons_putstr1(struct CONSOLE *cons, char *s, int l);
+249d246
+< void hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax);

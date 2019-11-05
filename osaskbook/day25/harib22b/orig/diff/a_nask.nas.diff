@@ -1,0 +1,4 @@
+34c34
+< _api_putstr0:	; void api_putstr0(char *s);
+---
+> _api_putstr0:	; void api_putchar(char *s);

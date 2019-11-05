@@ -1,0 +1,12 @@
+94,95c94,95
+< 					if (mx > binfo->scrnx - 1) {
+< 						mx = binfo->scrnx - 1;
+---
+> 					if (mx > binfo->scrnx - 16) {
+> 						mx = binfo->scrnx - 16;
+97,98c97,98
+< 					if (my > binfo->scrny - 1) {
+< 						my = binfo->scrny - 1;
+---
+> 					if (my > binfo->scrny - 16) {
+> 						my = binfo->scrny - 16;

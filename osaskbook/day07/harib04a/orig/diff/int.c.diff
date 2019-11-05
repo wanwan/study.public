@@ -1,0 +1,27 @@
+4d3
+< #include <stdio.h>
+28,29d26
+< #define PORT_KEYDAT		0x0060
+< 
+30a28
+> /* PS/2キーボードからの割り込み */
+33,41c31,35
+< 	unsigned char data, s[4];
+< 	io_out8(PIC0_OCW2, 0x61);	/* IRQ-01受付完了をPICに通知 */
+< 	data = io_in8(PORT_KEYDAT);
+< 
+< 	sprintf(s, "%02X", data);
+< 	boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 16, 15, 31);
+< 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
+< 
+< 	return;
+---
+> 	boxfill8(binfo->vram, binfo->scrnx, COL8_000000, 0, 0, 32 * 8 - 1, 15);
+> 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 21 (IRQ-1) : PS/2 keyboard");
+> 	for (;;) {
+> 		io_hlt();
+> 	}
+63c57
+< 	io_out8(PIC0_OCW2, 0x67); /* IRQ-07受付完了をPICに通知 */
+---
+> 	io_out8(PIC0_OCW2, 0x67); /* IRQ-07受付完了をPICに通知(7-1参照) */

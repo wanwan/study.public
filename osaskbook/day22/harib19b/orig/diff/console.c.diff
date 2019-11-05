@@ -1,0 +1,20 @@
+323a324,325
+> 	} else if (edx == 123456789) {
+> 		*((char *) 0x00102600) = 0;
+328,338d329
+< int *inthandler0c(int *esp)
+< {
+< 	struct CONSOLE *cons = (struct CONSOLE *) *((int *) 0x0fec);
+< 	struct TASK *task = task_now();
+< 	char s[30];
+< 	cons_putstr0(cons, "\nINT 0C :\n Stack Exception.\n");
+< 	sprintf(s, "EIP = %08X\n", esp[11]);
+< 	cons_putstr0(cons, s);
+< 	return &(task->tss.esp0);	/* ˆÙíI—¹‚³‚¹‚é */
+< }
+< 
+343d333
+< 	char s[30];
+345,346d334
+< 	sprintf(s, "EIP = %08X\n", esp[11]);
+< 	cons_putstr0(cons, s);

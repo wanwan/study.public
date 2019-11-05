@@ -1,0 +1,4 @@
+79c79
+< 		/* task_run(task_b[i], 2, i + 1); */
+---
+> 		task_run(task_b[i], 2, i + 1);

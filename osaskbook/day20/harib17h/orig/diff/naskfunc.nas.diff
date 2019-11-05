@@ -1,0 +1,25 @@
+20c20
+< 		GLOBAL	_asm_hrb_api
+---
+> 		GLOBAL	_asm_cons_putchar
+23c23
+< 		EXTERN	_hrb_api
+---
+> 		EXTERN	_cons_putchar
+220c220
+< _asm_hrb_api:
+---
+> _asm_cons_putchar:
+222,225c222,228
+< 		PUSHAD	; 保存のためのPUSH
+< 		PUSHAD	; hrb_apiに渡すためのPUSH
+< 		CALL	_hrb_api
+< 		ADD		ESP,32
+---
+> 		PUSHAD
+> 		PUSH	1
+> 		AND		EAX,0xff	; AHやEAXの上位を0にして、EAXに文字コードが入った状態にする。
+> 		PUSH	EAX
+> 		PUSH	DWORD [0x0fec]	; メモリの内容を読み込んでその値をPUSHする
+> 		CALL	_cons_putchar
+> 		ADD		ESP,12		; スタックに積んだデータを捨てる

@@ -1,0 +1,24 @@
+19c19
+< 		GLOBAL	_asm_end_app, _memtest_sub
+---
+> 		GLOBAL	_memtest_sub
+193c193
+< 		JNE		_asm_end_app
+---
+> 		JNE		end_app
+212,213c212,213
+< 		CMP		EAX,0			; ‚±‚±‚¾‚¯ˆá‚¤
+< 		JNE		_asm_end_app	; ‚±‚±‚¾‚¯ˆá‚¤
+---
+> 		CMP		EAX,0		; ‚±‚±‚¾‚¯ˆá‚¤
+> 		JNE		end_app		; ‚±‚±‚¾‚¯ˆá‚¤
+273c273
+< 		JNE		_asm_end_app
+---
+> 		JNE		end_app
+279c279
+< _asm_end_app:
+---
+> end_app:
+282d281
+< 		MOV		DWORD [EAX+4],0

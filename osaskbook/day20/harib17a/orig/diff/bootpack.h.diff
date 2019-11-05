@@ -1,0 +1,18 @@
+232,235d231
+< struct CONSOLE {
+< 	struct SHEET *sht;
+< 	int cur_x, cur_y, cur_c;
+< };
+237,244c233
+< void cons_putchar(struct CONSOLE *cons, int chr, char move);
+< void cons_newline(struct CONSOLE *cons);
+< void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, unsigned int memtotal);
+< void cmd_mem(struct CONSOLE *cons, unsigned int memtotal);
+< void cmd_cls(struct CONSOLE *cons);
+< void cmd_dir(struct CONSOLE *cons);
+< void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline);
+< void cmd_hlt(struct CONSOLE *cons, int *fat);
+---
+> int cons_newline(int cursor_y, struct SHEET *sheet);
+255d243
+< struct FILEINFO *file_search(char *name, struct FILEINFO *finfo, int max);

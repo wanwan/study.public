@@ -1,0 +1,25 @@
+283,304c283
+< 	struct FIFO32 fifo;
+< 	struct TIMER *timer;
+< 	int i, fifobuf[128];
+< 
+< 	fifo32_init(&fifo, 128, fifobuf);
+< 	timer = timer_alloc();
+< 	timer_init(timer, &fifo, 1);
+< 	timer_settime(timer, 500);
+< 
+< 	for (;;) {
+< 		io_cli();
+< 		if (fifo32_status(&fifo) == 0) {
+< 			io_sti();
+< 			io_hlt();
+< 		} else {
+< 			i = fifo32_get(&fifo);
+< 			io_sti();
+< 			if (i == 1) { /* 5秒タイムアウト */
+< 				taskswitch3(); /* タスクAにもどる */
+< 			}
+< 		}
+< 	}
+---
+> 	for (;;) { io_hlt(); }

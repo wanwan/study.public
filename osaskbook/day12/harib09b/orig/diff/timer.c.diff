@@ -1,0 +1,9 @@
+8,9d7
+< struct TIMERCTL timerctl;
+< 
+15d12
+< 	timerctl.count = 0;
+22c19
+< 	timerctl.count++;
+---
+> 	/* ‚Æ‚è‚ ‚¦‚¸‚È‚É‚à‚µ‚È‚¢ */

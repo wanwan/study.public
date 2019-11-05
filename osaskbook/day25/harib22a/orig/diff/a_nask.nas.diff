@@ -1,0 +1,13 @@
+24d23
+< 		GLOBAL	_api_beep
+34c33
+< _api_putstr0:	; void api_putchar(char *s);
+---
+> _api_putstr0:	; void api_putstr0(char *s);
+224,229d222
+< 		RET
+< 
+< _api_beep:			; void api_beep(int tone);
+< 		MOV		EDX,20
+< 		MOV		EAX,[ESP+4]			; tone
+< 		INT		0x40

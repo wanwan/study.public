@@ -1,0 +1,22 @@
+33c33
+< 	struct TASK *task_a, *task_b;
+---
+> 	struct TASK *task_b;
+38c38
+< 	fifo32_init(&fifo, 128, fifobuf, 0);
+---
+> 	fifo32_init(&fifo, 128, fifobuf);
+90,91c90
+< 	task_a = task_init(memman);
+< 	fifo.task = task_a;
+---
+> 	task_init(memman);
+107,108c106
+< 			task_sleep(task_a);
+< 			io_sti();
+---
+> 			io_stihlt();
+268c266
+< 	fifo32_init(&fifo, 128, fifobuf, 0);
+---
+> 	fifo32_init(&fifo, 128, fifobuf);

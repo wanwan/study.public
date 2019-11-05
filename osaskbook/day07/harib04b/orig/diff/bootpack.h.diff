@@ -1,0 +1,6 @@
+16d15
+< void io_stihlt(void);
+79,81d77
+< struct KEYBUF {
+< 	unsigned char data, flag;
+< };

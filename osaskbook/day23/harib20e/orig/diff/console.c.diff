@@ -1,0 +1,3 @@
+378,379d377
+< 	} else if (edx == 14) {
+< 		sheet_free((struct SHEET *) ebx);

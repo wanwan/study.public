@@ -1,0 +1,20 @@
+20d19
+< 	timerctl.next = 0xffffffff; /* 最初は作動中のタイマがないので */
+56,59d54
+< 	if (timerctl.next > timer->timeout) {
+< 		/* 次回の時刻を更新 */
+< 		timerctl.next = timer->timeout;
+< 	}
+68,71d62
+< 	if (timerctl.next > timerctl.count) {
+< 		return; /* まだ次の時刻になってないので、もうおしまい */
+< 	}
+< 	timerctl.next = 0xffffffff;
+75d65
+< 				/* タイムアウト */
+78,82d67
+< 			} else {
+< 				/* まだタイムアウトではない */
+< 				if (timerctl.next > timerctl.timer[i].timeout) {
+< 					timerctl.next = timerctl.timer[i].timeout;
+< 				}

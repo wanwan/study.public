@@ -1,0 +1,12 @@
+287d286
+< 		*((int *) 0xfe8) = (int) p;
+301d299
+< 	int cs_base = *((int *) 0xfe8);
+306c304
+< 		cons_putstr0(cons, (char *) ebx + cs_base);
+---
+> 		cons_putstr0(cons, (char *) ebx);
+308c306
+< 		cons_putstr1(cons, (char *) ebx + cs_base, ecx);
+---
+> 		cons_putstr1(cons, (char *) ebx, ecx);

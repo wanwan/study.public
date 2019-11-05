@@ -1,0 +1,143 @@
+Archive member included to satisfy reference by file (symbol)
+
+libc/libc.a(sprintf.o)        bootpack.o (sprintf)
+
+Allocating common symbols
+Common symbol       size              file
+
+keybuf              0x24              int.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD bootpack.o
+LOAD dsctbl.o
+LOAD graphics.o
+LOAD int.o
+LOAD naskfunc.o
+LOAD font_8x16.o
+                0x0000000000280000                . = 0x280000
+
+.text           0x0000000000280000      0xe58
+ *(.text)
+ .text          0x0000000000280000      0x1ed bootpack.o
+                0x0000000000280000                HariMain
+ .text          0x00000000002801ed      0x1f3 dsctbl.o
+                0x00000000002801ed                init_gdtidt
+                0x0000000000280320                set_segmdesc
+                0x000000000028039b                set_gatedesc
+ .text          0x00000000002803e0      0x5ce graphics.o
+                0x00000000002803e0                init_palette
+                0x00000000002803fd                set_palette
+                0x00000000002804a9                boxfill8
+                0x00000000002804fb                init_screen8
+                0x0000000000280718                putfont8
+                0x000000000028081a                putfonts8_asc
+                0x0000000000280869                init_mouse_cursor8
+                0x000000000028093f                putblock8_8
+ .text          0x00000000002809ae      0x1d7 int.o
+                0x00000000002809ae                init_pic
+                0x0000000000280a89                inthandler21
+                0x0000000000280ad8                inthandler2c
+                0x0000000000280b3e                inthandler27
+ .text          0x0000000000280b85       0xc1 naskfunc.o
+                0x0000000000280b85                _io_hlt
+                0x0000000000280b87                _io_cli
+                0x0000000000280b89                _io_sti
+                0x0000000000280b8b                _io_stihlt
+                0x0000000000280b8e                _io_in8
+                0x0000000000280b99                _io_in16
+                0x0000000000280ba5                _io_in32
+                0x0000000000280bab                _io_out8
+                0x0000000000280bb5                _io_out16
+                0x0000000000280bc1                _io_out32
+                0x0000000000280bcb                _io_load_eflags
+                0x0000000000280bce                _io_store_eflags
+                0x0000000000280bd5                _load_gdtr
+                0x0000000000280be5                _load_idtr
+                0x0000000000280bf5                _asm_inthandler21
+                0x0000000000280c10                _asm_inthandler27
+                0x0000000000280c2b                _asm_inthandler2c
+ .text          0x0000000000280c46        0x0 font_8x16.o
+ .text          0x0000000000280c46      0x212 libc/libc.a(sprintf.o)
+                0x0000000000280d8d                sprintf
+
+.iplt           0x0000000000280e58        0x0
+ .iplt          0x0000000000280e58        0x0 libc/libc.a(sprintf.o)
+
+.rodata         0x0000000000280e60     0x1040
+ .rodata        0x0000000000280e60        0xe bootpack.o
+ .rodata        0x0000000000280e6e       0x32 int.o
+ .rodata        0x0000000000280ea0     0x1000 font_8x16.o
+                0x0000000000280ea0                fontdata_8x16
+
+.note.gnu.property
+                0x0000000000281ea0       0x1c
+ .note.gnu.property
+                0x0000000000281ea0       0x1c libc/libc.a(sprintf.o)
+
+.rel.dyn        0x0000000000281ebc        0x0
+ .rel.got       0x0000000000281ebc        0x0 libc/libc.a(sprintf.o)
+ .rel.iplt      0x0000000000281ebc        0x0 libc/libc.a(sprintf.o)
+ .rel.text      0x0000000000281ebc        0x0 libc/libc.a(sprintf.o)
+
+.data           0x0000000000281ec0      0x140
+ *(.data)
+ .data          0x0000000000281ec0        0x0 bootpack.o
+ .data          0x0000000000281ec0        0x0 dsctbl.o
+ .data          0x0000000000281ec0      0x140 graphics.o
+ .data          0x0000000000282000        0x0 int.o
+ .data          0x0000000000282000        0x0 naskfunc.o
+ .data          0x0000000000282000        0x0 font_8x16.o
+ .data          0x0000000000282000        0x0 libc/libc.a(sprintf.o)
+
+.got            0x0000000000282000        0x0
+ .got           0x0000000000282000        0x0 libc/libc.a(sprintf.o)
+
+.got.plt        0x0000000000282000        0x0
+ .got.plt       0x0000000000282000        0x0 libc/libc.a(sprintf.o)
+
+.igot.plt       0x0000000000282000        0x0
+ .igot.plt      0x0000000000282000        0x0 libc/libc.a(sprintf.o)
+
+.bss            0x0000000000282000       0x24
+ *(.bss)
+ .bss           0x0000000000282000        0x0 bootpack.o
+ .bss           0x0000000000282000        0x0 dsctbl.o
+ .bss           0x0000000000282000        0x0 graphics.o
+ .bss           0x0000000000282000        0x0 int.o
+ .bss           0x0000000000282000        0x0 naskfunc.o
+ .bss           0x0000000000282000        0x0 font_8x16.o
+ .bss           0x0000000000282000        0x0 libc/libc.a(sprintf.o)
+ COMMON         0x0000000000282000       0x24 int.o
+                0x0000000000282000                keybuf
+LOAD libc/libc.a
+OUTPUT(kernel.elf elf32-i386)
+
+.comment        0x0000000000000000       0x1a
+ .comment       0x0000000000000000       0x1a bootpack.o
+                                         0x1b (size before relaxing)
+ .comment       0x000000000000001a       0x1b dsctbl.o
+ .comment       0x000000000000001a       0x1b graphics.o
+ .comment       0x000000000000001a       0x1b int.o
+ .comment       0x000000000000001a       0x1b font_8x16.o
+ .comment       0x000000000000001a       0x1b libc/libc.a(sprintf.o)
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 bootpack.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 dsctbl.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 graphics.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 int.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 font_8x16.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 libc/libc.a(sprintf.o)
