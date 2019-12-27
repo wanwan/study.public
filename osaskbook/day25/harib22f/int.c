@@ -25,18 +25,3 @@ void init_pic(void)
 	_io_out8(PIC1_IMR,  0xff  ); /* 11111111 全ての割り込みを受け付けない */
 
 }
-
-
-void inthandler27(int *esp)
-/* PIC0からの不完全割り込み対策 */
-/* Athlon64X2機などではチップセットの都合によりPICの初期化時にこの割り込みが1度だけおこる */
-/* この割り込み処理関数は、その割り込みに対して何もしないでやり過ごす */
-/* なぜ何もしなくていいの？
-	→  この割り込みはPIC初期化時の電気的なノイズによって発生したものなので、
-		まじめに何か処理してやる必要がない。									*/
-{
-	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;  
-	putfonts8_asc((char *)binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, "INT 27 (IRQ-7) : xxx");  
-	_io_out8(PIC0_OCW2, 0x67); /* IRQ-07受付完了をPICに通知(7-1参照) */
-	return;
-}

@@ -15,16 +15,18 @@
 .global _load_gdtr, _load_idtr
 .global	_load_cr0, _store_cr0
 .global _load_tr
-.global _asm_inthandler0c, _asm_inthandler0d
 .global _asm_inthandler20, _asm_inthandler21
-.global _asm_inthandler27, _asm_inthandler2c
+.global _asm_inthandler2c, _asm_inthandler0c
+.global _asm_inthandler0d
 .global _asm_end_app, _memtest_sub
 .global _taskswitch3, _taskswitch4
 .global	_farjmp, _farcall	
 .global _asm_hrb_api, _start_app
-.extern inthandler0c, inthandler0d
 .extern inthandler20, inthandler21
-.extern inthandler27, inthandler2c
+.extern inthandler2c, inthandler0c
+.extern inthandler0d
+
+
 .extern hrb_api
 	
 	# 以下は実際の関数
@@ -154,23 +156,6 @@ _asm_inthandler21:
 	iret
 	
 	
-_asm_inthandler27:
-	pushw	%es
-	pushw	%ds
-	pushal
-	movl	%esp, %eax
-	pushl	%eax
-	movw	%ss, %ax
-	movw	%ax, %ds
-	movw	%ax, %es
-	call	inthandler27
-	popl	%eax
-	popal
-	popw	%ds
-	popw	%es
-	iret
-	
-
 _asm_inthandler2c:
 	pushw	%es
 	pushw	%ds

@@ -97,6 +97,8 @@ next:
 
 
 error:
+	movw	$0, %ax
+	movw	%ax, %es
 	movw	$msg, %si
 	
 putloop:
