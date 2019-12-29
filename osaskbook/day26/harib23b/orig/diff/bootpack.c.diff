@@ -1,0 +1,13 @@
+46c46
+< 	int j, x, y, mmx = -1, mmy = -1;
+---
+> 	int j, x, y, mmx = -1, mmy = -1, mmx2 = 0;
+255a256
+> 											mmx2 = sht->vx0;
+276,278c277,278
+< 							sheet_slide(sht, sht->vx0 + x, sht->vy0 + y);
+< 							mmx = mx;	/* 移動後の座標に更新 */
+< 							mmy = my;
+---
+> 							sheet_slide(sht, (mmx2 + x + 2) & ~3, sht->vy0 + y);
+> 							mmy = my;	/* 移動後の座標に更新 */
