@@ -1,0 +1,35 @@
+24c24
+< 	struct SHEET *sht_back, *sht_mouse, *sht_cons[2];
+---
+> 	struct SHEET *sht_back, *sht_mouse;
+80,81c80
+< 	sht_cons[0] = open_console(shtctl, memtotal);
+< 	sht_cons[1] = 0; /* ‚Ü‚¾ŠJ‚¢‚Ä‚È‚¢ */
+---
+> 	key_win = open_console(shtctl, memtotal);
+91c90
+< 	sheet_slide(sht_cons[0], 32, 4);
+---
+> 	sheet_slide(key_win,   32, 4);
+93,96c92,94
+< 	sheet_updown(sht_back,     0);
+< 	sheet_updown(sht_cons[0],  1);
+< 	sheet_updown(sht_mouse,    2);
+< 	key_win = sht_cons[0];
+---
+> 	sheet_updown(sht_back,  0);
+> 	sheet_updown(key_win,   1);
+> 	sheet_updown(sht_mouse, 2);
+197,200c195
+< 				if (i == 256 + 0x3c && key_shift != 0 && sht_cons[1] == 0) {	/* Shift+F2 */
+< 					sht_cons[1] = open_console(shtctl, memtotal);
+< 					sheet_slide(sht_cons[1], 32, 4);
+< 					sheet_updown(sht_cons[1], shtctl->top);
+---
+> 				if (i == 256 + 0x3c && key_shift != 0) {	/* Shift+F2 */
+203c198,200
+< 					key_win = sht_cons[1];
+---
+> 					key_win = open_console(shtctl, memtotal);
+> 					sheet_slide(key_win, 32, 4);
+> 					sheet_updown(key_win, shtctl->top);
