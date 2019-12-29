@@ -1,0 +1,25 @@
+78,82c78,83
+< 		for (by = by0; by < by1; by++) {
+< 			vy = sht->vy0 + by;
+< 			for (bx = bx0; bx < bx1; bx++) {
+< 				vx = sht->vx0 + bx;
+< 				if (buf[by * sht->bxsize + bx] != sht->col_inv) {
+---
+> 		if (sht->col_inv == -1) {
+> 			/* “§–¾F‚È‚µê—p‚Ì‚‘¬”Å */
+> 			for (by = by0; by < by1; by++) {
+> 				vy = sht->vy0 + by;
+> 				for (bx = bx0; bx < bx1; bx++) {
+> 					vx = sht->vx0 + bx;
+83a85,95
+> 				}
+> 			}
+> 		} else {
+> 			/* “§–¾F‚ ‚è‚Ìˆê”Ê”Å */
+> 			for (by = by0; by < by1; by++) {
+> 				vy = sht->vy0 + by;
+> 				for (bx = bx0; bx < bx1; bx++) {
+> 					vx = sht->vx0 + bx;
+> 					if (buf[by * sht->bxsize + bx] != sht->col_inv) {
+> 						map[vy * ctl->xsize + vx] = sid;
+> 					}
