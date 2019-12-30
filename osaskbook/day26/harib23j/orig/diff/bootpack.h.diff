@@ -1,0 +1,6 @@
+226a227
+> extern struct TASKCTL *taskctl;
+259a261
+> void cmd_ncst(struct CONSOLE *cons, char *cmdline, int memtotal);
+277a280
+> struct TASK *open_constask(struct SHEET *sht, unsigned int memtotal);

@@ -1,0 +1,117 @@
+20,22c20,24
+< 	cons.timer = timer_alloc();
+< 	timer_init(cons.timer, &task->fifo, 1);
+< 	timer_settime(cons.timer, 50);
+---
+> 	if (sheet != 0) {
+> 		cons.timer = timer_alloc();
+> 		timer_init(cons.timer, &task->fifo, 1);
+> 		timer_settime(cons.timer, 50);
+> 	}
+54c56,59
+< 				boxfill8(sheet->buf, sheet->bxsize, COL8_000000, cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+---
+> 				if (sheet != 0) {
+> 					boxfill8(sheet->buf, sheet->bxsize, COL8_000000,
+> 						cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+> 				}
+74a80,82
+> 					if (sheet == 0) {
+> 						cmd_exit(&cons, fat);
+> 					}
+87,88c95,100
+< 			if (cons.cur_c >= 0) {
+< 				boxfill8(sheet->buf, sheet->bxsize, cons.cur_c, cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+---
+> 			if (sheet != 0) {
+> 				if (cons.cur_c >= 0) {
+> 					boxfill8(sheet->buf, sheet->bxsize, cons.cur_c, 
+> 						cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+> 				}
+> 				sheet_refresh(sheet, cons.cur_x, cons.cur_y, cons.cur_x + 8, cons.cur_y + 16);
+90d101
+< 			sheet_refresh(sheet, cons.cur_x, cons.cur_y, cons.cur_x + 8, cons.cur_y + 16);
+102c113,115
+< 			putfonts8_asc_sht(cons->sht, cons->cur_x, cons->cur_y, COL8_FFFFFF, COL8_000000, " ", 1);
+---
+> 			if (cons->sht != 0) {
+> 				putfonts8_asc_sht(cons->sht, cons->cur_x, cons->cur_y, COL8_FFFFFF, COL8_000000, " ", 1);
+> 			}
+116c129,131
+< 		putfonts8_asc_sht(cons->sht, cons->cur_x, cons->cur_y, COL8_FFFFFF, COL8_000000, s, 1);
+---
+> 		if (cons->sht != 0) {
+> 			putfonts8_asc_sht(cons->sht, cons->cur_x, cons->cur_y, COL8_FFFFFF, COL8_000000, s, 1);
+> 		}
+136,138c151,155
+< 		for (y = 28; y < 28 + 112; y++) {
+< 			for (x = 8; x < 8 + 240; x++) {
+< 				sheet->buf[x + y * sheet->bxsize] = sheet->buf[x + (y + 16) * sheet->bxsize];
+---
+> 		if (sheet != 0) {
+> 			for (y = 28; y < 28 + 112; y++) {
+> 				for (x = 8; x < 8 + 240; x++) {
+> 					sheet->buf[x + y * sheet->bxsize] = sheet->buf[x + (y + 16) * sheet->bxsize];
+> 				}
+140,143c157,160
+< 		}
+< 		for (y = 28 + 112; y < 28 + 128; y++) {
+< 			for (x = 8; x < 8 + 240; x++) {
+< 				sheet->buf[x + y * sheet->bxsize] = COL8_000000;
+---
+> 			for (y = 28 + 112; y < 28 + 128; y++) {
+> 				for (x = 8; x < 8 + 240; x++) {
+> 					sheet->buf[x + y * sheet->bxsize] = COL8_000000;
+> 				}
+144a162
+> 			sheet_refresh(sheet, 8, 28, 8 + 240, 28 + 128);
+146d163
+< 		sheet_refresh(sheet, 8, 28, 8 + 240, 28 + 128);
+171c188
+< 	if (strcmp(cmdline, "mem") == 0) {
+---
+> 	if (strcmp(cmdline, "mem") == 0 && cons->sht != 0) {
+173c190
+< 	} else if (strcmp(cmdline, "cls") == 0) {
+---
+> 	} else if (strcmp(cmdline, "cls") == 0 && cons->sht != 0) {
+175c192
+< 	} else if (strcmp(cmdline, "dir") == 0) {
+---
+> 	} else if (strcmp(cmdline, "dir") == 0 && cons->sht != 0) {
+177c194
+< 	} else if (strncmp(cmdline, "type ", 5) == 0) {
+---
+> 	} else if (strncmp(cmdline, "type ", 5) == 0 && cons->sht != 0) {
+182a200,201
+> 	} else if (strncmp(cmdline, "ncst ", 5) == 0) {
+> 		cmd_ncst(cons, cmdline, memtotal);
+266c285,287
+< 	timer_cancel(cons->timer);
+---
+> 	if (cons->sht != 0) {
+> 		timer_cancel(cons->timer);
+> 	}
+269c290,294
+< 	fifo32_put(fifo, cons->sht - shtctl->sheets0 + 768);	/* 768～1023 */
+---
+> 	if (cons->sht != 0) {
+> 		fifo32_put(fifo, cons->sht - shtctl->sheets0 + 768);	/* 768～1023 */
+> 	} else {
+> 		fifo32_put(fifo, task - taskctl->tasks0 + 1024);	/* 1024～2023 */
+> 	}
+285a311,324
+> 		fifo32_put(fifo, cmdline[i] + 256);
+> 	}
+> 	fifo32_put(fifo, 10 + 256);	/* Enter */
+> 	cons_newline(cons);
+> 	return;
+> }
+> 
+> void cmd_ncst(struct CONSOLE *cons, char *cmdline, int memtotal)
+> {
+> 	struct TASK *task = open_constask(0, memtotal);
+> 	struct FIFO32 *fifo = &task->fifo;
+> 	int i;
+> 	/* コマンドラインに入力された文字列を、一文字ずつ新しいコンソールに入力 */
+> 	for (i = 5; cmdline[i] != 0; i++) {
