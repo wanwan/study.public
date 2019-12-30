@@ -1,0 +1,4 @@
+98a99
+> #define AR_LDT			0x0082
+212a214
+> 	struct SEGMENT_DESCRIPTOR ldt[2];

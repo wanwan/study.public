@@ -1,0 +1,6 @@
+84a85
+> 		taskctl->tasks0[i].tss.ldtr = (TASK_GDT0 + MAX_TASKS + i) * 8;
+85a87
+> 		set_segmdesc(gdt + TASK_GDT0 + MAX_TASKS + i, 15, (int) taskctl->tasks0[i].ldt, AR_LDT);
+136d137
+< 			task->tss.ldtr = 0;
