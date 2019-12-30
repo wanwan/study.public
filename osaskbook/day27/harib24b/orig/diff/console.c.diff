@@ -1,0 +1,44 @@
+20c20
+< 	if (sheet != 0) {
+---
+> 	if (cons.sht != 0) {
+38c38
+< 			if (i <= 1) { /* カーソル用タイマ */
+---
+> 			if (i <= 1 && cons.sht != 0) { /* カーソル用タイマ */
+56,57c56,57
+< 				if (sheet != 0) {
+< 					boxfill8(sheet->buf, sheet->bxsize, COL8_000000,
+---
+> 				if (cons.sht != 0) {
+> 					boxfill8(cons.sht->buf, cons.sht->bxsize, COL8_000000,
+80c80
+< 					if (sheet == 0) {
+---
+> 					if (cons.sht == 0) {
+95c95
+< 			if (sheet != 0) {
+---
+> 			if (cons.sht != 0) {
+97c97
+< 					boxfill8(sheet->buf, sheet->bxsize, cons.cur_c, 
+---
+> 					boxfill8(cons.sht->buf, cons.sht->bxsize, cons.cur_c, 
+100c100
+< 				sheet_refresh(sheet, cons.cur_x, cons.cur_y, cons.cur_x + 8, cons.cur_y + 16);
+---
+> 				sheet_refresh(cons.sht, cons.cur_x, cons.cur_y, cons.cur_x + 8, cons.cur_y + 16);
+408a409
+> 	struct FIFO32 *sys_fifo = (struct FIFO32 *) *((int *) 0x0fec);
+485c486
+< 			if (i <= 1) { /* カーソル用タイマ */
+---
+> 			if (i <= 1 && cons->sht != 0) { /* カーソル用タイマ */
+494a496,502
+> 			}
+> 			if (i == 4) {	/* コンソールだけを閉じる */
+> 				timer_cancel(cons->timer);
+> 				io_cli();
+> 				fifo32_put(sys_fifo, cons->sht - shtctl->sheets0 + 2024);	/* 2024～2279 */
+> 				cons->sht = 0;
+> 				io_sti();
