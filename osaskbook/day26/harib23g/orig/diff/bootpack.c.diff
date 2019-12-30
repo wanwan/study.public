@@ -1,0 +1,64 @@
+10a11,12
+> void close_console(struct SHEET *sht);
+> void close_constask(struct TASK *task);
+53a56
+> 	*((int *) 0x0fec) = (int) &fifo;
+126,128c129,135
+< 			if (key_win->flags == 0) {	/* ウィンドウが閉じられた */
+< 				key_win = shtctl->sheets[shtctl->top - 1];
+< 				keywin_on(key_win);
+---
+> 			if (key_win != 0 && key_win->flags == 0) {	/* ウィンドウが閉じられた */
+> 				if (shtctl->top == 1) {	/* もうマウスと背景しかない */
+> 					key_win = 0;
+> 				} else {
+> 					key_win = shtctl->sheets[shtctl->top - 1];
+> 					keywin_on(key_win);
+> 				}
+146c153
+< 				if (s[0] != 0) { /* 通常文字、バックスペース、Enter */
+---
+> 				if (s[0] != 0 && key_win != 0) { /* 通常文字、バックスペース、Enter */
+149c156
+< 				if (i == 256 + 0x0f) {	/* Tab */
+---
+> 				if (i == 256 + 0x0f && key_win != 0) {	/* Tab */
+185c192
+< 				if (i == 256 + 0x3b && key_shift != 0) {	/* Shift+F1 */
+---
+> 				if (i == 256 + 0x3b && key_shift != 0 && key_win != 0) {	/* Shift+F1 */
+197c204,206
+< 					keywin_off(key_win);
+---
+> 					if (key_win != 0) {
+> 						keywin_off(key_win);
+> 					}
+286a296,297
+> 			} else if (768 <= i && i <= 1023) {	/* コンソール終了処理 */
+> 				close_console(shtctl->sheets0 + (i - 768));
+320c331,332
+< 	task->tss.esp = memman_alloc_4k(memman, 64 * 1024) + 64 * 1024 - 12;
+---
+> 	task->cons_stack = memman_alloc_4k(memman, 64 * 1024);
+> 	task->tss.esp = task->cons_stack + 64 * 1024 - 12;
+334a347,366
+> }
+> 
+> void close_constask(struct TASK *task)
+> {
+> 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+> 	task_sleep(task);
+> 	memman_free_4k(memman, task->cons_stack, 64 * 1024);
+> 	memman_free_4k(memman, (int) task->fifo.buf, 128 * 4);
+> 	task->flags = 0; /* task_free(task); の代わり */
+> 	return;
+> }
+> 
+> void close_console(struct SHEET *sht)
+> {
+> 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+> 	struct TASK *task = sht->task;
+> 	memman_free_4k(memman, (int) sht->buf, 256 * 165);
+> 	sheet_free(sht);
+> 	close_constask(task);
+> 	return;

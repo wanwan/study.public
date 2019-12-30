@@ -1,0 +1,6 @@
+214c214
+< 	int ds_base;
+---
+> 	int ds_base, cons_stack;
+257a258
+> void cmd_exit(struct CONSOLE *cons, int *fat);
