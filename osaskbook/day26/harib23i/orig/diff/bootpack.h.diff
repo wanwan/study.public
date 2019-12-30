@@ -1,0 +1,5 @@
+258a259
+> void cmd_start(struct CONSOLE *cons, char *cmdline, int memtotal);
+275a277,278
+> /* bootpack.c */
+> struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal);

@@ -1,0 +1,2 @@
+10d9
+< struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal);
