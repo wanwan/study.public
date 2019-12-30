@@ -1,0 +1,6 @@
+272a273,277
+> 											} else {	/* ƒRƒ“ƒ\[ƒ‹ */
+> 												task = sht->task;
+> 												io_cli();
+> 												fifo32_put(&task->fifo, 4);
+> 												io_sti();
