@@ -16,7 +16,7 @@ QEMU=qemu-system-i386
 STRIP=strip
 
 APLLDSCRIPT=-T sosu2.lds
-APLCFLAGS=-m32 -Wl,--build-id=none -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -fno-builtin -fno-stack-protector -nostdlib -I../libc/include -I../
+APLCFLAGS=-m32 -Wl,--build-id=none -fno-builtin -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -fno-stack-protector -nostdlib -I../libc/include -I../
 
 APLLIBFLAGS=-L../apilib -lapi -L../libc -lc
 
@@ -27,7 +27,7 @@ all: sosu2
 
 
 sosu2: sosu2.c
-	$(CC) -c $(APLCFLAGS) -m32 -Wl,--build-id=none -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -fno-builtin -O0 $<
+	$(CC) -c $(APLCFLAGS) -m32 -Wl,--build-id=none -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -O0 $<
 	$(CC) -m32 -static -Wl,-eHariMain -Wl,--build-id=none -nostdlib $(APLLDSCRIPT) -o sosu2.hrb sosu2.o $(APLLIBFLAGS)
 
 

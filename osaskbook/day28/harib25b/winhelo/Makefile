@@ -15,7 +15,7 @@ QEMU=qemu-system-i386
 #QEMU=qemu-system-x86_64
 STRIP=strip
 
-APLLDSCRIPT=-T ../haribote.lds
+APLLDSCRIPT=-T ./winhelo.lds
 APLCFLAGS=-m32 -Wl,--build-id=none -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -fno-builtin -fno-stack-protector -nostdlib -I../libc/include -I../
 
 APLLIBFLAGS=-L../apilib -lapi -L../libc -lc
@@ -26,7 +26,7 @@ APLLIBFLAGS=-L../apilib -lapi -L../libc -lc
 all: winhelo
 
 winhelo: winhelo.c
-	$(CC) -c $(APLCFLAGS) winhelo.c -m32 -Wl,--build-id=none -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -fno-builtin -O0 
+	$(CC) -c $(APLCFLAGS) winhelo.c -m32 -Wl,--build-id=none -fno-pie -fno-asynchronous-unwind-tables -Ilibc/include -O0 
 	$(CC) -m32 -static -Wl,-eHariMain -Wl,--build-id=none -nostdlib $(APLLDSCRIPT) -o winhelo.hrb winhelo.o $(APLLIBFLAGS)
 
 .c.o:

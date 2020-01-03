@@ -21,6 +21,7 @@
 .global	api_freetimer
 .global	api_beep	
 .global	api_debug
+.global __alloca
 	
 
 	
@@ -257,3 +258,4 @@ api_debug:	# void api_freetimer(char x);
 	popl	%ebx
 	ret
 	
+
