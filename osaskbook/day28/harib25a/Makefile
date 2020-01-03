@@ -22,7 +22,7 @@ LIBFLAGS=-L. -lc
 IPLBIN=haribote/ipl.bin
 KERNEL=haribote/kernel
 
-APLSUBDIR=a hello3 hello4 winhelo winhelo2 winhelo3 star1 stars stars2 lines walk noodle beepdown color color2
+APLSUBDIR=a hello3 hello4 winhelo winhelo2 winhelo3 star1 stars stars2 lines walk noodle beepdown color color2 sosu sosu2 sosu3
 
 
 .PHONY: all libc apilib apl kernel makedisk install run clean
@@ -82,6 +82,9 @@ install: kernel makedisk apl
 	sudo cp beepdown/beepdown.hrb ./mnt
 	sudo cp color/color.hrb ./mnt
 	sudo cp color2/color2.hrb ./mnt
+	sudo cp sosu/sosu.hrb ./mnt
+	sudo cp sosu2/sosu2.hrb ./mnt
+	sudo cp sosu3/sosu3.hrb ./mnt
 	sudo umount ./mnt
 
 run: all
