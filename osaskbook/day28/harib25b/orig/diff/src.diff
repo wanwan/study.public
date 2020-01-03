@@ -1,0 +1,36 @@
+Only in harib25b/apilib: alloca.nas
+Binary files harib25a/apilib/apilib.lib and harib25b/apilib/apilib.lib differ
+diff -r harib25a/apilib/Makefile harib25b/apilib/Makefile
+4c4,5
+< 			api019.obj api020.obj
+---
+> 			api019.obj api020.obj \
+> 			alloca.obj
+diff -r harib25a/apilib/TRANS.TBL harib25b/apilib/TRANS.TBL
+0a1
+> F ALLOCA.NAS;1                                                                                                                                                                                                    	alloca.nas
+Binary files harib25a/sosu2/sosu2.hrb and harib25b/sosu2/sosu2.hrb differ
+diff -r harib25a/winhelo/Makefile harib25b/winhelo/Makefile
+2c2
+< STACK    = 1k
+---
+> STACK    = 8k
+diff -r harib25a/winhelo/winhelo.c harib25b/winhelo/winhelo.c
+3,4d2
+< char buf[150 * 50];
+< 
+7a6
+> 	char buf[150 * 50];
+Binary files harib25a/winhelo/winhelo.hrb and harib25b/winhelo/winhelo.hrb differ
+diff -r harib25a/winhelo2/Makefile harib25b/winhelo2/Makefile
+2c2
+< STACK    = 1k
+---
+> STACK    = 8k
+diff -r harib25a/winhelo2/winhelo2.c harib25b/winhelo2/winhelo2.c
+3,4d2
+< char buf[150 * 50];
+< 
+7a6
+> 	char buf[150 * 50];
+Binary files harib25a/winhelo2/winhelo2.hrb and harib25b/winhelo2/winhelo2.hrb differ
