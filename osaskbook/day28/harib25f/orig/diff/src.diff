@@ -1,0 +1,51 @@
+diff -r harib25e/haribote/bootpack.h harib25f/haribote/bootpack.h
+220c220
+< 	char langmode;
+---
+> 	unsigned char langmode, langbyte1;
+diff -r harib25e/haribote/console.c harib25f/haribote/console.c
+39a40
+> 	task->langbyte1 = 0;
+160a162
+> 	struct TASK *task = task_now();
+179a182,184
+> 	if (task->langmode == 1 && task->langbyte1 != 0) {
+> 		cons->cur_x = 16;
+> 	}
+403a409
+> 			task->langbyte1 = 0;
+diff -r harib25e/haribote/graphic.c harib25f/haribote/graphic.c
+111c111,112
+< 	char *nihongo = (char *) *((int *) 0x0fe8);
+---
+> 	char *nihongo = (char *) *((int *) 0x0fe8), *font;
+> 	int k, t;
+121c122,146
+< 			putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+---
+> 			if (task->langbyte1 == 0) {
+> 				if ((0x81 <= *s && *s <= 0x9f) || (0xe0 <= *s && *s <= 0xfc)) {
+> 					task->langbyte1 = *s;
+> 				} else {
+> 					putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+> 				}
+> 			} else {
+> 				if (0x81 <= task->langbyte1 && task->langbyte1 <= 0x9f) {
+> 					k = (task->langbyte1 - 0x81) * 2;
+> 				} else {
+> 					k = (task->langbyte1 - 0xe0) * 2 + 62;
+> 				}
+> 				if (0x40 <= *s && *s <= 0x7e) {
+> 					t = *s - 0x40;
+> 				} else if (0x80 <= *s && *s <= 0x9e) {
+> 					t = *s - 0x80 + 63;
+> 				} else {
+> 					t = *s - 0x9f;
+> 					k++;
+> 				}
+> 				task->langbyte1 = 0;
+> 				font = nihongo + 256 * 16 + (k * 94 + t) * 32;
+> 				putfont8(vram, xsize, x - 8, y, c, font     );	/* ¶”¼•ª */
+> 				putfont8(vram, xsize, x    , y, c, font + 16);	/* ‰E”¼•ª */
+> 			}
+Binary files harib25e/haribote/haribote.sys and harib25f/haribote/haribote.sys differ
