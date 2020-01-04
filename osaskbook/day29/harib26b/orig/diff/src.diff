@@ -1,0 +1,148 @@
+diff -r harib26a/a/Makefile harib26b/a/Makefile
+5a6,8
+> 
+> $(APP).hrb : $(APP).org Makefile
+> 	$(COPY) $(APP).org $(APP).hrb
+diff -r harib26a/app_make.txt harib26b/app_make.txt
+13a14
+> BIM2BIN  = $(TOOLPATH)bim2bin.exe
+32,34d32
+< $(APP).hrb : $(APP).bim Makefile ../app_make.txt
+< 	$(BIM2HRB) $(APP).bim $(APP).hrb $(MALLOC)
+< 
+54a53,58
+> %.org : %.bim Makefile ../app_make.txt
+> 	$(BIM2HRB) $*.bim $*.org $(MALLOC)
+> 
+> %.hrb : %.org Makefile ../app_make.txt
+> 	$(BIM2BIN) -osacmp in:$*.org out:$*.hrb
+> 
+75a80
+> 	-$(DEL) *.org
+Binary files harib26a/beepdown/beepdown.hrb and harib26b/beepdown/beepdown.hrb differ
+Binary files harib26a/chklang/chklang.hrb and harib26b/chklang/chklang.hrb differ
+Binary files harib26a/color/color.hrb and harib26b/color/color.hrb differ
+Binary files harib26a/color2/color2.hrb and harib26b/color2/color2.hrb differ
+diff -r harib26a/haribote/bootpack.c harib26b/haribote/bootpack.c
+109d108
+< 	nihongo = (unsigned char *) memman_alloc_4k(memman, 16 * 256 + 32 * 94 * 47);
+111a111
+> 
+114c114,115
+< 		file_loadfile(finfo->clustno, finfo->size, nihongo, fat, (char *) (ADR_DISKIMG + 0x003e00));
+---
+> 		i = finfo->size;
+> 		nihongo = file_loadfile2(finfo->clustno, &i, fat);
+115a117
+> 		nihongo = (unsigned char *) memman_alloc_4k(memman, 16 * 256 + 32 * 94 * 47);
+diff -r harib26a/haribote/bootpack.h harib26b/haribote/bootpack.h
+288a289,293
+> char *file_loadfile2(int clustno, int *psize, int *fat);
+> 
+> /* tek.c */
+> int tek_getsize(unsigned char *p);
+> int tek_decomp(unsigned char *p, char *q, int size);
+diff -r harib26a/haribote/console.c harib26b/haribote/console.c
+351c351
+< 	int i, segsiz, datsiz, esp, dathrb;
+---
+> 	int i, segsiz, datsiz, esp, dathrb, appsiz;
+378,380c378,380
+< 		p = (char *) memman_alloc_4k(memman, finfo->size);
+< 		file_loadfile(finfo->clustno, finfo->size, p, fat, (char *) (ADR_DISKIMG + 0x003e00));
+< 		if (finfo->size >= 36 && strncmp(p + 4, "Hari", 4) == 0 && *p == 0x00) {
+---
+> 		appsiz = finfo->size;
+> 		p = file_loadfile2(finfo->clustno, &appsiz, fat);
+> 		if (appsiz >= 36 && strncmp(p + 4, "Hari", 4) == 0 && *p == 0x00) {
+387,388c387,388
+< 			set_segmdesc(task->ldt + 0, finfo->size - 1, (int) p, AR_CODE32_ER + 0x60);
+< 			set_segmdesc(task->ldt + 1, segsiz - 1,      (int) q, AR_DATA32_RW + 0x60);
+---
+> 			set_segmdesc(task->ldt + 0, appsiz - 1, (int) p, AR_CODE32_ER + 0x60);
+> 			set_segmdesc(task->ldt + 1, segsiz - 1, (int) q, AR_DATA32_RW + 0x60);
+413c413
+< 		memman_free_4k(memman, (int) p, finfo->size);
+---
+> 		memman_free_4k(memman, (int) p, appsiz);
+565d564
+< 				fh->buf = (char *) memman_alloc_4k(memman, finfo->size);
+568c567
+< 				file_loadfile(finfo->clustno, finfo->size, fh->buf, task->fat, (char *) (ADR_DISKIMG + 0x003e00));
+---
+> 				fh->buf = file_loadfile2(finfo->clustno, &fh->size, task->fat);
+diff -r harib26a/haribote/file.c harib26b/haribote/file.c
+74a75,94
+> 
+> char *file_loadfile2(int clustno, int *psize, int *fat)
+> {
+> 	int size = *psize, size2;
+> 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+> 	char *buf, *buf2;
+> 	buf = (char *) memman_alloc_4k(memman, size);
+> 	file_loadfile(clustno, size, buf, fat, (char *) (ADR_DISKIMG + 0x003e00));
+> 	if (size >= 17) {
+> 		size2 = tek_getsize(buf);
+> 		if (size2 > 0) {	/* tekˆ³k‚ª‚©‚©‚Á‚Ä‚¢‚½ */
+> 			buf2 = (char *) memman_alloc_4k(memman, size2);
+> 			tek_decomp(buf, buf2, size2);
+> 			memman_free_4k(memman, (int) buf, size);
+> 			buf = buf2;
+> 			*psize = size2;
+> 		}
+> 	}
+> 	return buf;
+> }
+Binary files harib26a/haribote/haribote.sys and harib26b/haribote/haribote.sys differ
+diff -r harib26a/haribote/Makefile harib26b/haribote/Makefile
+3c3
+< 		mtask.obj window.obj console.obj file.obj
+---
+> 		mtask.obj window.obj console.obj file.obj tek.obj
+Only in harib26b/haribote: tek.c
+diff -r harib26a/haribote/TRANS.TBL harib26b/haribote/TRANS.TBL
+21a22
+> F TEK.C;1                                                                                                                                                                                                         	tek.c
+Binary files harib26a/hello3/hello3.hrb and harib26b/hello3/hello3.hrb differ
+diff -r harib26a/hello4/Makefile harib26b/hello4/Makefile
+5a6,8
+> 
+> $(APP).hrb : $(APP).org Makefile
+> 	$(COPY) $(APP).org $(APP).hrb
+diff -r harib26a/hello5/Makefile harib26b/hello5/Makefile
+5a6,8
+> 
+> $(APP).hrb : $(APP).org Makefile
+> 	$(COPY) $(APP).org $(APP).hrb
+diff -r harib26a/iroha/Makefile harib26b/iroha/Makefile
+5a6,8
+> 
+> $(APP).hrb : $(APP).org Makefile
+> 	$(COPY) $(APP).org $(APP).hrb
+Binary files harib26a/lines/lines.hrb and harib26b/lines/lines.hrb differ
+Binary files harib26a/nihongo/nihongo.fnt and harib26b/nihongo/nihongo.fnt differ
+Only in harib26b/nihongo: nihongo.org
+diff -r harib26a/nihongo/TRANS.TBL harib26b/nihongo/TRANS.TBL
+3a4
+> F NIHONGO.ORG;1                                                                                                                                                                                                   	nihongo.org
+Binary files harib26a/noodle/noodle.hrb and harib26b/noodle/noodle.hrb differ
+Binary files harib26a/sosu/sosu.hrb and harib26b/sosu/sosu.hrb differ
+Binary files harib26a/sosu2/sosu2.hrb and harib26b/sosu2/sosu2.hrb differ
+Binary files harib26a/sosu3/sosu3.hrb and harib26b/sosu3/sosu3.hrb differ
+Binary files harib26a/star1/star1.hrb and harib26b/star1/star1.hrb differ
+Binary files harib26a/stars/stars.hrb and harib26b/stars/stars.hrb differ
+Binary files harib26a/stars2/stars2.hrb and harib26b/stars2/stars2.hrb differ
+Only in harib26b: tek
+diff -r harib26a/TRANS.TBL harib26b/TRANS.TBL
+26a27
+> D TEK                                                                                                                                                                                                             	tek
+Binary files harib26a/type/type.hrb and harib26b/type/type.hrb differ
+Binary files harib26a/typeipl/typeipl.hrb and harib26b/typeipl/typeipl.hrb differ
+Binary files harib26a/walk/walk.hrb and harib26b/walk/walk.hrb differ
+diff -r harib26a/winhelo/Makefile harib26b/winhelo/Makefile
+5a6,8
+> 
+> $(APP).hrb : $(APP).org Makefile
+> 	$(COPY) $(APP).org $(APP).hrb
+Binary files harib26a/winhelo2/winhelo2.hrb and harib26b/winhelo2/winhelo2.hrb differ
+Binary files harib26a/winhelo3/winhelo3.hrb and harib26b/winhelo3/winhelo3.hrb differ
