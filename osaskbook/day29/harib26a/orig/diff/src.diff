@@ -1,0 +1,15 @@
+Binary files 28_day/harib25g/haribote/haribote.sys and 29_day/harib26a/haribote/haribote.sys differ
+diff -r 28_day/harib25g/haribote/window.c 29_day/harib26a/haribote/window.c
+68a69
+> 	struct TASK *task = task_now();
+70,71c71,77
+< 	putfonts8_asc(sht->buf, sht->bxsize, x, y, c, s);
+< 	sheet_refresh(sht, x, y, x + l * 8, y + 16);
+---
+> 	if (task->langmode != 0 && task->langbyte1 != 0) {
+> 		putfonts8_asc(sht->buf, sht->bxsize, x, y, c, s);
+> 		sheet_refresh(sht, x - 8, y, x + l * 8, y + 16);
+> 	} else {
+> 		putfonts8_asc(sht->buf, sht->bxsize, x, y, c, s);
+> 		sheet_refresh(sht, x, y, x + l * 8, y + 16);
+> 	}
