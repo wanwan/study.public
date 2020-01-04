@@ -1,0 +1,76 @@
+Only in harib25d/apilib: api026.nas
+Binary files harib25c/apilib/apilib.lib and harib25d/apilib/apilib.lib differ
+diff -r harib25c/apilib/Makefile harib25d/apilib/Makefile
+5c5
+< 			api025.obj alloca.obj
+---
+> 			api025.obj api026.obj alloca.obj
+diff -r harib25c/apilib/TRANS.TBL harib25d/apilib/TRANS.TBL
+26a27
+> F API026.NAS;1                                                                                                                                                                                                    	api026.nas
+diff -r harib25c/apilib.h harib25d/apilib.h
+25a26
+> int api_cmdline(char *buf, int maxsize);
+diff -r harib25c/haribote/bootpack.h harib25d/haribote/bootpack.h
+218a219
+> 	char *cmdline;
+267d267
+< void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline);
+diff -r harib25c/haribote/console.c harib25d/haribote/console.c
+20a21
+> 	task->cmdline = cmdline;
+201,202d201
+< 	} else if (strncmp(cmdline, "type ", 5) == 0 && cons->sht != 0) {
+< 		cmd_type(cons, fat, cmdline);
+267,285d265
+< void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline)
+< {
+< 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+< 	struct FILEINFO *finfo = file_search(cmdline + 5, (struct FILEINFO *) (ADR_DISKIMG + 0x002600), 224);
+< 	char *p;
+< 	if (finfo != 0) {
+< 		/* ファイルが見つかった場合 */
+< 		p = (char *) memman_alloc_4k(memman, finfo->size);
+< 		file_loadfile(finfo->clustno, finfo->size, p, fat, (char *) (ADR_DISKIMG + 0x003e00));
+< 		cons_putstr1(cons, p, finfo->size);
+< 		memman_free_4k(memman, (int) p, finfo->size);
+< 	} else {
+< 		/* ファイルが見つからなかった場合 */
+< 		cons_putstr0(cons, "File not found.\n");
+< 	}
+< 	cons_newline(cons);
+< 	return;
+< }
+< 
+599a580,592
+> 		}
+> 		reg[7] = i;
+> 	} else if (edx == 26) {
+> 		i = 0;
+> 		for (;;) {
+> 			*((char *) ebx + ds_base + i) =  task->cmdline[i];
+> 			if (task->cmdline[i] == 0) {
+> 				break;
+> 			}
+> 			if (i >= ecx) {
+> 				break;
+> 			}
+> 			i++;
+Binary files harib25c/haribote/haribote.sys and harib25d/haribote/haribote.sys differ
+diff -r harib25c/Makefile harib25d/Makefile
+24c24
+< 		typeipl/typeipl.hrb
+---
+> 		typeipl/typeipl.hrb type/type.hrb
+49a50
+> 		copy from:type/type.hrb to:@: \
+85a87
+> 	$(MAKE) -C type
+130a133
+> 	$(MAKE) -C type			clean
+154a158
+> 	$(MAKE) -C type			src_only
+diff -r harib25c/TRANS.TBL harib25d/TRANS.TBL
+22a23
+> D TYPE                                                                                                                                                                                                            	type
+Only in harib25d: type
