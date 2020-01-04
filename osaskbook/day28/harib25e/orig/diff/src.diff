@@ -1,0 +1,103 @@
+diff -r harib25d/app_make.txt harib25e/app_make.txt
+40a41
+> 		copy from:../nihongo/nihongo.fnt to:@: \
+diff -r harib25d/haribote/bootpack.c harib25e/haribote/bootpack.c
+49a50,53
+> 	int *fat;
+> 	unsigned char *nihongo;
+> 	struct FILEINFO *finfo;
+> 	extern char hankaku[4096];
+73a78
+> 	task_a->langmode = 0;
+101a107,124
+> 
+> 	/* nihongo.fntの読み込み */
+> 	nihongo = (unsigned char *) memman_alloc_4k(memman, 16 * 256 + 32 * 94 * 47);
+> 	fat = (int *) memman_alloc_4k(memman, 4 * 2880);
+> 	file_readfat(fat, (unsigned char *) (ADR_DISKIMG + 0x000200));
+> 	finfo = file_search("nihongo.fnt", (struct FILEINFO *) (ADR_DISKIMG + 0x002600), 224);
+> 	if (finfo != 0) {
+> 		file_loadfile(finfo->clustno, finfo->size, nihongo, fat, (char *) (ADR_DISKIMG + 0x003e00));
+> 	} else {
+> 		for (i = 0; i < 16 * 256; i++) {
+> 			nihongo[i] = hankaku[i]; /* フォントがなかったので半角部分をコピー */
+> 		}
+> 		for (i = 16 * 256; i < 16 * 256 + 32 * 94 * 47; i++) {
+> 			nihongo[i] = 0xff; /* フォントがなかったので全角部分を0xffで埋め尽くす */
+> 		}
+> 	}
+> 	*((int *) 0x0fe8) = (int) nihongo;
+> 	memman_free_4k(memman, (int) fat, 4 * 2880);
+diff -r harib25d/haribote/bootpack.h harib25e/haribote/bootpack.h
+219a220
+> 	char langmode;
+270a272
+> void cmd_langmode(struct CONSOLE *cons, char *cmdline);
+diff -r harib25d/haribote/console.c harib25e/haribote/console.c
+14a15
+> 	unsigned char *nihongo = (char *) *((int *) 0x0fe8);
+33a35,39
+> 	if (nihongo[4096] != 0xff) {	/* 日本語フォントファイルを読み込めたか？ */
+> 		task->langmode = 1;
+> 	} else {
+> 		task->langmode = 0;
+> 	}
+207a214,215
+> 	} else if (strncmp(cmdline, "langmode ", 9) == 0) {
+> 		cmd_langmode(cons, cmdline);
+314a323,335
+> 	cons_newline(cons);
+> 	return;
+> }
+> 
+> void cmd_langmode(struct CONSOLE *cons, char *cmdline)
+> {
+> 	struct TASK *task = task_now();
+> 	unsigned char mode = cmdline[9] - '0';
+> 	if (mode <= 1) {
+> 		task->langmode = mode;
+> 	} else {
+> 		cons_putstr0(cons, "mode number error.\n");
+> 	}
+diff -r harib25d/haribote/graphic.c harib25e/haribote/graphic.c
+110,112c110,123
+< 	for (; *s != 0x00; s++) {
+< 		putfont8(vram, xsize, x, y, c, hankaku + *s * 16);
+< 		x += 8;
+---
+> 	struct TASK *task = task_now();
+> 	char *nihongo = (char *) *((int *) 0x0fe8);
+> 
+> 	if (task->langmode == 0) {
+> 		for (; *s != 0x00; s++) {
+> 			putfont8(vram, xsize, x, y, c, hankaku + *s * 16);
+> 			x += 8;
+> 		}
+> 	}
+> 	if (task->langmode == 1) {
+> 		for (; *s != 0x00; s++) {
+> 			putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+> 			x += 8;
+> 		}
+Binary files harib25d/haribote/haribote.sys and harib25e/haribote/haribote.sys differ
+Only in harib25e: iroha
+diff -r harib25d/Makefile harib25e/Makefile
+24c24
+< 		typeipl/typeipl.hrb type/type.hrb
+---
+> 		typeipl/typeipl.hrb type/type.hrb iroha/iroha.hrb
+50a51,52
+> 		copy from:iroha/iroha.hrb to:@: \
+> 		copy from:nihongo/nihongo.fnt to:@: \
+87a90
+> 	$(MAKE) -C iroha
+133a137
+> 	$(MAKE) -C iroha		clean
+158a163
+> 	$(MAKE) -C iroha		src_only
+Only in harib25e: nihongo
+diff -r harib25d/TRANS.TBL harib25e/TRANS.TBL
+12a13
+> D IROHA                                                                                                                                                                                                           	iroha
+15a17
+> D NIHONGO                                                                                                                                                                                                         	nihongo
