@@ -22,7 +22,7 @@ LIBFLAGS=-L. -lc
 IPLBIN=haribote/ipl.bin
 KERNEL=haribote/kernel
 
-APLSUBDIR=a hello3 hello4 winhelo winhelo2 winhelo3 star1 stars stars2 lines walk noodle beepdown color color2 sosu sosu2 sosu3 typeipl type iroha
+APLSUBDIR=a hello3 hello4 winhelo winhelo2 winhelo3 star1 stars stars2 lines walk noodle beepdown color color2 sosu sosu2 sosu3 typeipl type iroha chklang
 
 
 .PHONY: all libc apilib apl kernel makedisk install run clean
@@ -90,6 +90,8 @@ install: kernel makedisk apl
 	sudo cp type/type.hrb ./mnt
 	sudo cp iroha/iroha.hrb ./mnt
 	sudo cp nihongo/nihongo.fnt ./mnt
+	sudo cp chklang/chklang.hrb ./mnt
+	sudo cp euc.txt ./mnt
 	sudo umount ./mnt
 
 run: all

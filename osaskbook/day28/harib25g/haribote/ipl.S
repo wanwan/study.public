@@ -1,6 +1,6 @@
 // -*- tab-width : 4 ; mode : Assembler -*-
 
-#define CYLS	10
+#define CYLS	20
 
 	
 	.file "helloos.S"

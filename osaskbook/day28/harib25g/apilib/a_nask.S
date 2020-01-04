@@ -27,6 +27,7 @@
 .global api_fsize
 .global api_fread	
 .global api_cmdline
+.global api_getlang
 	
 .section .text
 	
@@ -306,6 +307,12 @@ api_cmdline:						# int api_cmdline(char *buf, int maxsize);
 	pop	%ebx
 	ret
 	
+
+api_getlang:						# int api_getlang(void);
+	movl	$27, %edx
+	int	$0x40
+	ret
+
 	
 api_debug:	# void api_freetimer(char x);
 	pushl	%ebx
