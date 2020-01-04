@@ -1,0 +1,112 @@
+Only in harib25g/apilib: api027.nas
+Binary files harib25f/apilib/apilib.lib and harib25g/apilib/apilib.lib differ
+diff -r harib25f/apilib/Makefile harib25g/apilib/Makefile
+5c5
+< 			api025.obj api026.obj alloca.obj
+---
+> 			api025.obj api026.obj api027.obj alloca.obj
+diff -r harib25f/apilib/TRANS.TBL harib25g/apilib/TRANS.TBL
+27a28
+> F API027.NAS;1                                                                                                                                                                                                    	api027.nas
+diff -r harib25f/apilib.h harib25g/apilib.h
+26a27
+> int api_getlang(void);
+diff -r harib25f/app_make.txt harib25g/app_make.txt
+35c35
+< haribote.img : ../haribote/ipl10.bin ../haribote/haribote.sys $(APP).hrb \
+---
+> haribote.img : ../haribote/ipl20.bin ../haribote/haribote.sys $(APP).hrb \
+38c38
+< 		wbinimg src:../haribote/ipl10.bin len:512 from:0 to:0 \
+---
+> 		wbinimg src:../haribote/ipl20.bin len:512 from:0 to:0 \
+Only in harib25g: chklang
+Only in harib25g: euc.txt
+diff -r harib25f/haribote/console.c harib25g/haribote/console.c
+336c336
+< 	if (mode <= 1) {
+---
+> 	if (mode <= 2) {
+621a622,623
+> 	} else if (edx == 27) {
+> 		reg[7] = task->langmode;
+diff -r harib25f/haribote/graphic.c harib25g/haribote/graphic.c
+149a150,168
+> 	if (task->langmode == 2) {
+> 		for (; *s != 0x00; s++) {
+> 			if (task->langbyte1 == 0) {
+> 				if (0x81 <= *s && *s <= 0xfe) {
+> 					task->langbyte1 = *s;
+> 				} else {
+> 					putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+> 				}
+> 			} else {
+> 				k = task->langbyte1 - 0xa1;
+> 				t = *s - 0xa1;
+> 				task->langbyte1 = 0;
+> 				font = nihongo + 256 * 16 + (k * 94 + t) * 32;
+> 				putfont8(vram, xsize, x - 8, y, c, font     );	/* ¶”¼•ª */
+> 				putfont8(vram, xsize, x    , y, c, font + 16);	/* ‰E”¼•ª */
+> 			}
+> 			x += 8;
+> 		}
+> 	}
+Binary files harib25f/haribote/haribote.sys and harib25g/haribote/haribote.sys differ
+Only in harib25f/haribote: ipl10.bin
+Only in harib25f/haribote: ipl10.nas
+Only in harib25g/haribote: ipl20.bin
+Only in harib25g/haribote: ipl20.nas
+diff -r harib25f/haribote/Makefile harib25g/haribote/Makefile
+26c26
+< 	$(MAKE) ipl10.bin
+---
+> 	$(MAKE) ipl20.bin
+31,32c31,32
+< ipl10.bin : ipl10.nas Makefile
+< 	$(NASK) ipl10.nas ipl10.bin ipl10.lst
+---
+> ipl20.bin : ipl20.nas Makefile
+> 	$(NASK) ipl20.nas ipl20.bin ipl20.lst
+78c78
+< 	-$(DEL) ipl10.bin
+---
+> 	-$(DEL) ipl20.bin
+diff -r harib25f/haribote/TRANS.TBL harib25g/haribote/TRANS.TBL
+12,13c12,13
+< F IPL10.BIN;1                                                                                                                                                                                                     	ipl10.bin
+< F IPL10.NAS;1                                                                                                                                                                                                     	ipl10.nas
+---
+> F IPL20.BIN;1                                                                                                                                                                                                     	ipl20.bin
+> F IPL20.NAS;1                                                                                                                                                                                                     	ipl20.nas
+diff -r harib25f/Makefile harib25g/Makefile
+17c17
+< haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
+---
+> haribote.img : haribote/ipl20.bin haribote/haribote.sys Makefile \
+24c24,25
+< 		typeipl/typeipl.hrb type/type.hrb iroha/iroha.hrb
+---
+> 		typeipl/typeipl.hrb type/type.hrb iroha/iroha.hrb \
+> 		chklang/chklang.hrb
+26c27
+< 		wbinimg src:haribote/ipl10.bin len:512 from:0 to:0 \
+---
+> 		wbinimg src:haribote/ipl20.bin len:512 from:0 to:0 \
+28c29
+< 		copy from:haribote/ipl10.nas to:@: \
+---
+> 		copy from:haribote/ipl20.nas to:@: \
+51a53,54
+> 		copy from:chklang/chklang.hrb to:@: \
+> 		copy from:euc.txt to:@: \
+90a94
+> 	$(MAKE) -C chklang
+137a142
+> 	$(MAKE) -C chklang		clean
+163a169
+> 	$(MAKE) -C chklang		src_only
+diff -r harib25f/TRANS.TBL harib25g/TRANS.TBL
+5a6
+> D CHKLANG                                                                                                                                                                                                         	chklang
+7a9
+> F EUC.TXT;1                                                                                                                                                                                                       	euc.txt
