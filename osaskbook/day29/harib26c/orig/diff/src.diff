@@ -1,0 +1,30 @@
+diff -r harib26b/Makefile harib26c/Makefile
+24,25c24,25
+< 		typeipl/typeipl.hrb type/type.hrb iroha/iroha.hrb \
+< 		chklang/chklang.hrb
+---
+> 		type/type.hrb iroha/iroha.hrb chklang/chklang.hrb \
+> 		notrec/notrec.hrb
+50d49
+< 		copy from:typeipl/typeipl.hrb to:@: \
+54a54
+> 		copy from:notrec/notrec.hrb to:@: \
+91d90
+< 	$(MAKE) -C typeipl
+94a94
+> 	$(MAKE) -C notrec
+139d138
+< 	$(MAKE) -C typeipl		clean
+142a142
+> 	$(MAKE) -C notrec		clean
+166d165
+< 	$(MAKE) -C typeipl		src_only
+169a169
+> 	$(MAKE) -C notrec		src_only
+Only in harib26c: notrec
+diff -r harib26b/TRANS.TBL harib26c/TRANS.TBL
+20a21
+> D NOTREC                                                                                                                                                                                                          	notrec
+29d29
+< D TYPEIPL                                                                                                                                                                                                         	typeipl
+Only in harib26b: typeipl
