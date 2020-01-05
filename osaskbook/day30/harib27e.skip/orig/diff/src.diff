@@ -1,0 +1,75 @@
+diff -r harib27d/app_make.txt harib27e/app_make.txt
+33c33
+< haribote.img : ../haribote/ipl20.bin ../haribote/haribote.sys $(APP).hrb \
+---
+> haribote.img : ../haribote/ipl09.bin ../haribote/haribote.sys $(APP).hrb \
+36c36
+< 		wbinimg src:../haribote/ipl20.bin len:512 from:0 to:0 \
+---
+> 		wbinimg src:../haribote/ipl09.bin len:512 from:0 to:0 \
+Only in harib27e/haribote: ipl09.bin
+Only in harib27e/haribote: ipl09.nas
+Only in harib27d/haribote: ipl20.bin
+Only in harib27d/haribote: ipl20.nas
+diff -r harib27d/haribote/Makefile harib27e/haribote/Makefile
+26c26
+< 	$(MAKE) ipl20.bin
+---
+> 	$(MAKE) ipl09.bin
+31,32c31,32
+< ipl20.bin : ipl20.nas Makefile
+< 	$(NASK) ipl20.nas ipl20.bin ipl20.lst
+---
+> ipl09.bin : ipl09.nas Makefile
+> 	$(NASK) ipl09.nas ipl09.bin ipl09.lst
+78c78
+< 	-$(DEL) ipl20.bin
+---
+> 	-$(DEL) ipl09.bin
+diff -r harib27d/haribote/TRANS.TBL harib27e/haribote/TRANS.TBL
+12,13c12,13
+< F IPL20.BIN;1                                                                                                                                                                                                     	ipl20.bin
+< F IPL20.NAS;1                                                                                                                                                                                                     	ipl20.nas
+---
+> F IPL09.BIN;1                                                                                                                                                                                                     	ipl09.bin
+> F IPL09.NAS;1                                                                                                                                                                                                     	ipl09.nas
+diff -r harib27d/invader/invader.c harib27e/invader/invader.c
+1d0
+< #include <stdio.h>		/* sprintf */
+6a6
+> void setdec8(char *s, int i);
+159c159
+< 					sprintf(s, "%08d", score);
+---
+> 					setdec8(s, score);
+264a265,276
+> 	return;
+> }
+> 
+> void setdec8(char *s, int i)
+> /* i‚ð10i”•\‹L‚Ås‚ÉŠi”[ */
+> {
+> 	int j;
+> 	for (j = 7; j >= 0; j--) {
+> 		s[j] = '0' + i % 10;
+> 		i /= 10;
+> 	}
+> 	s[8] = 0;
+Binary files harib27d/invader/invader.hrb and harib27e/invader/invader.hrb differ
+Only in harib27e: ipl09.nas
+diff -r harib27d/Makefile harib27e/Makefile
+17c17
+< haribote.img : haribote/ipl20.bin haribote/haribote.sys Makefile \
+---
+> haribote.img : haribote/ipl09.bin haribote/haribote.sys Makefile \
+28c28
+< 		wbinimg src:haribote/ipl20.bin len:512 from:0 to:0 \
+---
+> 		wbinimg src:haribote/ipl09.bin len:512 from:0 to:0 \
+30c30
+< 		copy from:haribote/ipl20.nas to:@: \
+---
+> 		copy from:ipl09.nas to:@: \
+diff -r harib27d/TRANS.TBL harib27e/TRANS.TBL
+18a19
+> F IPL09.NAS;1                                                                                                                                                                                                     	ipl09.nas

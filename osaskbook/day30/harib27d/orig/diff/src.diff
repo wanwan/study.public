@@ -1,0 +1,22 @@
+Only in harib27d: gview
+diff -r harib27c/Makefile harib27d/Makefile
+26c26
+< 		calc/calc.hrb tview/tview.hrb mmlplay/mmlplay.hrb
+---
+> 		calc/calc.hrb tview/tview.hrb mmlplay/mmlplay.hrb gview/gview.hrb
+64a65,67
+> 		copy from:gview/gview.hrb to:@: \
+> 		copy from:pictdata/fujisan.jpg to:@: \
+> 		copy from:pictdata/night.bmp to:@: \
+109a113
+> 	$(MAKE) -C gview
+162a167
+> 	$(MAKE) -C gview		clean
+194a200
+> 	$(MAKE) -C gview		src_only
+Only in harib27d: pictdata
+diff -r harib27c/TRANS.TBL harib27d/TRANS.TBL
+11a12
+> D GVIEW                                                                                                                                                                                                           	gview
+26a28
+> D PICTDATA                                                                                                                                                                                                        	pictdata
