@@ -1,0 +1,17 @@
+diff -r harib27a/Makefile harib27b/Makefile
+26c26
+< 		calc/calc.hrb
+---
+> 		calc/calc.hrb tview/tview.hrb
+58a59
+> 		copy from:tview/tview.hrb to:@: \
+101a103
+> 	$(MAKE) -C tview
+152a155
+> 	$(MAKE) -C tview		clean
+182a186
+> 	$(MAKE) -C tview		src_only
+diff -r harib27a/TRANS.TBL harib27b/TRANS.TBL
+31a32
+> D TVIEW                                                                                                                                                                                                           	tview
+Only in harib27b: tview
