@@ -1,0 +1,18 @@
+Only in 30_day/harib27a: calc
+diff -r 29_day/harib26e/Makefile 30_day/harib27a/Makefile
+25c25,26
+< 		notrec/notrec.hrb bball/bball.hrb invader/invader.hrb
+---
+> 		notrec/notrec.hrb bball/bball.hrb invader/invader.hrb \
+> 		calc/calc.hrb
+56a58
+> 		copy from:calc/calc.hrb to:@: \
+98a101
+> 	$(MAKE) -C calc
+148a152
+> 	$(MAKE) -C calc			clean
+177a182
+> 	$(MAKE) -C calc			src_only
+diff -r 29_day/harib26e/TRANS.TBL 30_day/harib27a/TRANS.TBL
+6a7
+> D CALC                                                                                                                                                                                                            	calc
