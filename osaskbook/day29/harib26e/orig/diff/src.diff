@@ -1,0 +1,17 @@
+Only in harib26e: invader
+diff -r harib26d/Makefile harib26e/Makefile
+25c25
+< 		notrec/notrec.hrb bball/bball.hrb
+---
+> 		notrec/notrec.hrb bball/bball.hrb invader/invader.hrb
+55a56
+> 		copy from:invader/invader.hrb to:@: \
+96a98
+> 	$(MAKE) -C invader
+145a148
+> 	$(MAKE) -C invader		clean
+173a177
+> 	$(MAKE) -C invader		src_only
+diff -r harib26d/TRANS.TBL harib26e/TRANS.TBL
+15a16
+> D INVADER                                                                                                                                                                                                         	invader
