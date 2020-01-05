@@ -1,0 +1,30 @@
+Only in harib26d: bball
+diff -r harib26c/haribote/console.c harib26d/haribote/console.c
+489a490,499
+> 			if (eax > esi) {
+> 				i = eax;
+> 				eax = esi;
+> 				esi = i;
+> 			}
+> 			if (ecx > edi) {
+> 				i = ecx;
+> 				ecx = edi;
+> 				edi = i;
+> 			}
+Binary files harib26c/haribote/haribote.sys and harib26d/haribote/haribote.sys differ
+diff -r harib26c/Makefile harib26d/Makefile
+25c25
+< 		notrec/notrec.hrb
+---
+> 		notrec/notrec.hrb bball/bball.hrb
+54a55
+> 		copy from:bball/bball.hrb to:@: \
+94a96
+> 	$(MAKE) -C bball
+142a145
+> 	$(MAKE) -C bball		clean
+169a173
+> 	$(MAKE) -C bball		src_only
+diff -r harib26c/TRANS.TBL harib26d/TRANS.TBL
+4a5
+> D BBALL                                                                                                                                                                                                           	bball
