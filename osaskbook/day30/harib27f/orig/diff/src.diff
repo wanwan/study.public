@@ -1,0 +1,6 @@
+Only in harib27f: haribote.img
+Only in harib27f: haribote.iso
+diff -r harib27e/TRANS.TBL harib27f/TRANS.TBL
+13a14,15
+> F HARIBOTE.IMG;1                                                                                                                                                                                                  	haribote.img
+> F HARIBOTE.ISO;1                                                                                                                                                                                                  	haribote.iso
