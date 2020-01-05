@@ -89,7 +89,8 @@ install: kernel makedisk apl
 	sudo cp ipl10.nas ./mnt
 	sudo cp type/type.hrb ./mnt
 	sudo cp iroha/iroha.hrb ./mnt
-	sudo cp nihongo/nihongo.fnt ./mnt
+#	sudo cp nihongo/nihongo.fnt ./mnt
+	sudo cp nihongo.compressed/nihongo.fnt ./mnt
 	sudo cp chklang/chklang.hrb ./mnt
 	sudo cp euc.txt ./mnt
 	sudo umount ./mnt

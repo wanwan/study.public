@@ -42,7 +42,7 @@ APLLIBFLAGS=-L. -lapl
 
 LIBFLAGS=-L. -lc
 
-KERNELOBJS=bootpack.o dsctbl.o graphics.o int.o fifo.o mouse.o keyboard.o memory.o sheet.o timer.o mtask.o file.o window.o console.o
+KERNELOBJS=bootpack.o dsctbl.o graphics.o int.o fifo.o mouse.o keyboard.o memory.o sheet.o timer.o mtask.o file.o window.o console.o tek.o
 
 .PHONY: all ipl kernelhead kernel libc font 
 
@@ -83,48 +83,6 @@ font:
 .S.o:
 	$(CC) -c $<
 
-
-makedisk:
-	dd if=/dev/zero of=$(IMG) bs=512 count=2880
-	mkfs.fat $(IMG)
-	dd if=$(IPLBIN) of=$(IMG) conv=notrunc
-#	dd if=/dev/urandom of=dummy.bin bs=512 count=1
-#	dd if=dummy.bin of=$(IMG) bs=512 seek=1 count=1 conv=notrunc
-
-install: kernel makedisk apl
-	mkdir -p mnt
-	sudo mount -o rw,loop $(IMG) ./mnt
-	sudo cp $(KERNEL) ./mnt
-	echo "hello world" > hello.txt
-	echo "	this is a tab1" >> hello.txt
-	echo "	this is a tab2" >> hello.txt
-	echo "		this is a tabtab" >> hello.txt
-	sudo cp hello.txt ./mnt
-	sudo cp hello.hrb ./mnt
-	sudo cp hello2.hrb ./mnt
-	sudo cp a.hrb ./mnt
-	sudo cp hello3.hrb ./mnt
-	sudo cp crack1.hrb ./mnt
-	sudo cp crack2.hrb ./mnt
-	sudo cp crack3.hrb ./mnt
-	sudo cp crack4.hrb ./mnt
-	sudo cp bug1.hrb ./mnt
-	sudo cp bug2.hrb ./mnt
-	sudo cp bug3.hrb ./mnt
-	sudo cp hello4.hrb ./mnt
-	sudo cp winhelo.hrb ./mnt
-	sudo cp winhelo2.hrb ./mnt
-	sudo cp winhelo3.hrb ./mnt
-	sudo cp star1.hrb ./mnt
-	sudo cp stars.hrb ./mnt
-	sudo cp stars2.hrb ./mnt
-	sudo cp lines.hrb ./mnt
-	sudo cp walk.hrb ./mnt
-	sudo cp noodle.hrb ./mnt
-	sudo cp beepdown.hrb ./mnt
-	sudo cp color.hrb ./mnt
-	sudo cp color2.hrb ./mnt
-	sudo umount ./mnt
 
 run: all
 	$(QEMU) -vga std -S -s -fda $(IMG) -serial stdio -soundhw pcspk

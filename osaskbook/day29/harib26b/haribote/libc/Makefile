@@ -13,16 +13,18 @@ OBJCOPY=objcopy
 QEMU=qemu-system-x86_64
 STRIP=strip
 
-SRCS=sprintf.c strcmp.c rand.c
-OBJS=sprintf.o strcmp.o rand.o
+SRCS=sprintf.c strcmp.c rand.c setjmp.S memcmp.c
+OBJS=sprintf.o strcmp.o rand.o setjmp.o memcmp.o
 
 all: libc
 
 libc: $(OBJS)
 	${AR} rcs libc.a $(OBJS)
 
-.o.c:
-	$(CC) $(CFLAGS) -o $< $@
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+.S.o:
+	$(CC) $(CFLAGS) -c $<
 
 clean:
 	rm -f *.o *~ *.a
