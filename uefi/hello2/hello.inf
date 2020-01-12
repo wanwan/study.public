@@ -1,0 +1,22 @@
+[Defines]
+  INF_VERSION                    = 0x00010001
+  BASE_NAME                      = hello2
+  FILE_GUID                      = 5ff56ece-79a6-4caf-a7dc-578ac41885ca
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 0.1
+  ENTRY_POINT                    = UefiMain
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources]
+  Hello.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  UefiLib
+
