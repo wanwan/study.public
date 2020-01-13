@@ -1,0 +1,11 @@
+#*#
+*~
+*.o
+*.bin
+*.hrb
+*.img
+*.elf
+*.lock
+*.map
+.emacs.desktop
+kernel
