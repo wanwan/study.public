@@ -67,10 +67,6 @@ typedef struct {
  {0x387477c2,0x69c7,0x11d2,\
  {0x8e,0x39,0x00,0xa0,0xc9,0x69,0x72,0x3b}}
 
-#define EFI_BOOT_SERVICES_SIGNATURE 0x56524553544f4f42
-#define EFI_BOOT_SERVICES_REVISION EFI_SPECIFICATION_VERSION
-
-
 
 typedef struct {
     UINT16 ScanCode;
@@ -142,28 +138,29 @@ typedef struct {
 
 
 
+
+
+
+#if 0
+
+#define EFI_BOOT_SERVICES_SIGNATURE 0x56524553544f4f42
+#define EFI_BOOT_SERVICES_REVISION EFI_SPECIFICATION_VERSION
+
 typedef struct {
     EFI_TABLE_HEADER Hdr;
     //
     // Task Priority Services
     //
-    //EFI_RAISE_TPL RaiseTPL; // EFI 1.0+
-    //EFI_RESTORE_TPL RestoreTPL; // EFI 1.0+
-    void *RaiseTPL; /* not implemented yet */
-    void *RestoreTPL; /* not implemented yet */
+    EFI_RAISE_TPL RaiseTPL; // EFI 1.0+
+    EFI_RESTORE_TPL RestoreTPL; // EFI 1.0+
     //
     // Memory Services
     //
-    //EFI_ALLOCATE_PAGES AllocatePages; // EFI 1.0+
-    //EFI_FREE_PAGES FreePages; // EFI 1.0+
-    //EFI_GET_MEMORY_MAP GetMemoryMap; // EFI 1.0+
-    //EFI_ALLOCATE_POOL AllocatePool; // EFI 1.0+
-    //EFI_FREE_POOL FreePool; // EFI 1.0+
-    void *AllocatePages; // EFI 1.0+
-    void *FreePages; // EFI 1.0+
-    void *GetMemoryMap; // EFI 1.0+
-    void *AllocatePool; // EFI 1.0+
-    void *FreePool; // EFI 1.0+
+    EFI_ALLOCATE_PAGES AllocatePages; // EFI 1.0+
+    EFI_FREE_PAGES FreePages; // EFI 1.0+
+    EFI_GET_MEMORY_MAP GetMemoryMap; // EFI 1.0+
+    EFI_ALLOCATE_POOL AllocatePool; // EFI 1.0+
+    EFI_FREE_POOL FreePool; // EFI 1.0+
     //
     // Event & Timer Services
     //
@@ -231,8 +228,6 @@ typedef struct {
     
 } EFI_BOOT_SERVICES;
 
-
-#if 0
 
 #define EFI_RUNTIME_SERVICES_SIGNATURE 0x56524553544e5552
 #define EFI_RUNTIME_SERVICES_REVISION EFI_SPECIFICATION_VERSION
