@@ -232,23 +232,32 @@ typedef struct _EFI_BOOT_SERVICES {
     //
     // Library Services
     //
-    EFI_PROTOCOLS_PER_HANDLE ProtocolsPerHandle; // EFI 1.1+
-    EFI_LOCATE_HANDLE_BUFFER LocateHandleBuffer; // EFI 1.1+
-    EFI_LOCATE_PROTOCOL LocateProtocol; // EFI 1.1+
-    EFI_INSTALL_MULTIPLE_PROTOCOL_INTERFACES InstallMultipleProtocolInterfaces; // EFI 1.1+
-    EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES UninstallMultipleProtocolInterfaces; // EFI 1.1+
+    //EFI_PROTOCOLS_PER_HANDLE ProtocolsPerHandle; // EFI 1.1+
+    //EFI_LOCATE_HANDLE_BUFFER LocateHandleBuffer; // EFI 1.1+
+    //EFI_LOCATE_PROTOCOL LocateProtocol; // EFI 1.1+
+    //EFI_INSTALL_MULTIPLE_PROTOCOL_INTERFACES InstallMultipleProtocolInterfaces; // EFI 1.1+
+    //EFI_UNINSTALL_MULTIPLE_PROTOCOL_INTERFACES UninstallMultipleProtocolInterfaces; // EFI 1.1+
+    void *ProtocolsPerHandle; /* not implemted yet */
+    void *LocateHandleBuffer; /* not implemted yet */
+    void *LocateProtocol; /* not implemted yet */
+    void *InstallMultipleProtocolInterfaces; /* not implemted yet */
+    void *UninstallMultipleProtocolInterfaces; /* not implemted yet */
     
     //
     // 32-bit CRC Services
     //
-    EFI_CALCULATE_CRC32 CalculateCrc32; // EFI 1.1+
+    //EFI_CALCULATE_CRC32 CalculateCrc32; // EFI 1.1+
+    void *CalculateCrc32; /* not implemted yet */
     
     //
     // Miscellaneous Services
     //
-    EFI_COPY_MEM CopyMem; // EFI 1.1+
-    EFI_SET_MEM SetMem; // EFI 1.1+
-    EFI_CREATE_EVENT_EX CreateEventEx; // UEFI 2.0+
+    //EFI_COPY_MEM CopyMem; // EFI 1.1+
+    //EFI_SET_MEM SetMem; // EFI 1.1+
+    //EFI_CREATE_EVENT_EX CreateEventEx; // UEFI 2.0+
+    void *CopyMem; /* not implemted yet */
+    void *SetMem; /* not implemted yet */
+    void *CreateEventEx; /* not implemted yet */
     
 } EFI_BOOT_SERVICES;
 
