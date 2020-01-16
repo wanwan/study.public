@@ -225,9 +225,9 @@ typedef struct _EFI_BOOT_SERVICES {
     //EFI_OPEN_PROTOCOL OpenProtocol; // EFI 1.1+
     //EFI_CLOSE_PROTOCOL CloseProtocol; // EFI 1.1+
     //EFI_OPEN_PROTOCOL_INFORMATION OpenProtocolInformation; // EFI 1.1+
-    EFI_OPEN_PROTOCOL OpenProtocol;
-    EFI_CLOSE_PROTOCOL CloseProtocol;
-    EFI_OPEN_PROTOCOL_INFORMATION OpenProtocolInformation;
+    void *OpenProtocol; /* not implemted yet */
+    void *CloseProtocol; /* not implemted yet */
+    void *OpenProtocolInformation; /* not implemted yet */
     
     //
     // Library Services
