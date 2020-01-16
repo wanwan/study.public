@@ -122,6 +122,7 @@ typedef struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
 
 
 typedef EFI_STATUS (*EFI_WAIT_FOR_EVENT) (UINTN NumberOfEvents, EFI_EVENT *Event, UINTN *Index);
+typedef EFI_STATUS (*EFI_SET_WATCHDOG_TIMER) (UINTN Timeout, UINT64 WatchdogCode, UINTN DataSize, CHAR16 *WatchdogData);
 
 
 typedef struct _EFI_BOOT_SERVICES {
@@ -167,44 +168,66 @@ typedef struct _EFI_BOOT_SERVICES {
     //
     // Protocol Handler Services
     //
-    EFI_INSTALL_PROTOCOL_INTERFACE InstallProtocolInterface; // EFI 1.0+
-    EFI_REINSTALL_PROTOCOL_INTERFACE ReinstallProtocolInterface; // EFI 1.0+
-    EFI_UNINSTALL_PROTOCOL_INTERFACE UninstallProtocolInterface; // EFI 1.0+
-    EFI_HANDLE_PROTOCOL HandleProtocol; // EFI 1.0+
-    VOID* Reserved; // EFI 1.0+
-    EFI_REGISTER_PROTOCOL_NOTIFY RegisterProtocolNotify; // EFI 1.0+
-    EFI_LOCATE_HANDLE LocateHandle; // EFI 1.0+
-    EFI_LOCATE_DEVICE_PATH LocateDevicePath; // EFI 1.0+
-    EFI_INSTALL_CONFIGURATION_TABLE InstallConfigurationTable; // EFI 1.0+
+    //EFI_INSTALL_PROTOCOL_INTERFACE InstallProtocolInterface; // EFI 1.0+
+    //EFI_REINSTALL_PROTOCOL_INTERFACE ReinstallProtocolInterface; // EFI 1.0+
+    //EFI_UNINSTALL_PROTOCOL_INTERFACE UninstallProtocolInterface; // EFI 1.0+
+    //EFI_HANDLE_PROTOCOL HandleProtocol; // EFI 1.0+
+    //VOID* Reserved; // EFI 1.0+
+    //EFI_REGISTER_PROTOCOL_NOTIFY RegisterProtocolNotify; // EFI 1.0+
+    //EFI_LOCATE_HANDLE LocateHandle; // EFI 1.0+
+    //EFI_LOCATE_DEVICE_PATH LocateDevicePath; // EFI 1.0+
+    //EFI_INSTALL_CONFIGURATION_TABLE InstallConfigurationTable; // EFI 1.0+
+    void *InstallProtocolInterface; /* not implemted yet */
+    void *ReinstallProtocolInterface; /* not implemted yet */
+    void *UninstallProtocolInterface; /* not implemted yet */
+    void *HandleProtocol; /* not implemted yet */
+    void *Reserved; /* not implemted yet */
+    void *RegisterProtocolNotify; /* not implemted yet */
+    void *LocateHandle; /* not implemted yet */
+    void *LocateDevicePath; /* not implemted yet */
+    void *InstallConfigurationTable; /* not implemted yet */
     
     //
     // Image Services
     //
-    EFI_IMAGE_LOAD LoadImage; // EFI 1.0+
-    EFI_IMAGE_START StartImage; // EFI 1.0+
-    EFI_EXIT Exit; // EFI 1.0+
-    EFI_IMAGE_UNLOAD UnloadImage; // EFI 1.0+
-    EFI_EXIT_BOOT_SERVICES ExitBootServices; // EFI 1.0+
+    //EFI_IMAGE_LOAD LoadImage; // EFI 1.0+
+    //EFI_IMAGE_START StartImage; // EFI 1.0+
+    //EFI_EXIT Exit; // EFI 1.0+
+    //EFI_IMAGE_UNLOAD UnloadImage; // EFI 1.0+
+    //EFI_EXIT_BOOT_SERVICES ExitBootServices; // EFI 1.0+
+    void *LoadImage; /* not implemted yet */
+    void *StartImage; /* not implemted yet */
+    void *Exit; /* not implemted yet */
+    void *UnloadImage; /* not implemted yet */
+    void *ExitBootServices; /* not implemted yet */
     
     //
     // Miscellaneous Services
     //
-    EFI_GET_NEXT_MONOTONIC_COUNT GetNextMonotonicCount; // EFI 1.0+
-    EFI_STALL Stall; // EFI 1.0+
-    EFI_SET_WATCHDOG_TIMER SetWatchdogTimer; // EFI 1.0+
+    //EFI_GET_NEXT_MONOTONIC_COUNT GetNextMonotonicCount; // EFI 1.0+
+    //EFI_STALL Stall; // EFI 1.0+
+    //EFI_SET_WATCHDOG_TIMER SetWatchdogTimer; // EFI 1.0+
+    void *GetNextMonotonicCount; /* not implemted yet */
+    void *Stall; /* not implemted yet */
+    EFI_SET_WATCHDOG_TIMER SetWatchdogTimer; 
     
     //
     // DriverSupport Services
     //
-    EFI_CONNECT_CONTROLLER ConnectController; // EFI 1.1
-    EFI_DISCONNECT_CONTROLLER DisconnectController;// EFI 1.1+
+    //EFI_CONNECT_CONTROLLER ConnectController; // EFI 1.1
+    //EFI_DISCONNECT_CONTROLLER DisconnectController;// EFI 1.1+
+    void *ConnectController; /* not implemted yet */
+    void *DisconnectController; /* not implemted yet */
     
     //
     // Open and Close Protocol Services
     //
-    EFI_OPEN_PROTOCOL OpenProtocol; // EFI 1.1+
-    EFI_CLOSE_PROTOCOL CloseProtocol; // EFI 1.1+
-    EFI_OPEN_PROTOCOL_INFORMATION OpenProtocolInformation; // EFI 1.1+
+    //EFI_OPEN_PROTOCOL OpenProtocol; // EFI 1.1+
+    //EFI_CLOSE_PROTOCOL CloseProtocol; // EFI 1.1+
+    //EFI_OPEN_PROTOCOL_INFORMATION OpenProtocolInformation; // EFI 1.1+
+    EFI_OPEN_PROTOCOL OpenProtocol;
+    EFI_CLOSE_PROTOCOL CloseProtocol;
+    EFI_OPEN_PROTOCOL_INFORMATION OpenProtocolInformation;
     
     //
     // Library Services
