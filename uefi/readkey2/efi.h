@@ -273,9 +273,8 @@ typedef struct _EFI_SYSTEM_TABLE {
     EFI_HANDLE StandardErrorHandle;
     EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *StdErr;
     //EFI_RUNTIME_SERVICES *RuntimeServices;
-    //EFI_BOOT_SERVICES *BootServices;    
     void *RuntimeServices; /* TODO: not support yet */
-    void *BootServices;    /* TODO: not support yet */
+    EFI_BOOT_SERVICES *BootServices;
     UINTN NumberOfTableEntries;
     //EFI_CONFIGURATION_TABLE *ConfigurationTable; /* TODO: not support yet */
     void *ConfigurationTable;    
