@@ -8,7 +8,7 @@ void putc(unsigned short c) {
 
     unsigned short str[2] = L" ";
     str[0] = c;
-    str[1] = 0x00;
+    //str[1] = 0x00;
     
     system_table->ConOut->OutputString(system_table->ConOut, str);
 }
@@ -22,7 +22,7 @@ void puts(unsigned short *s) {
 
 unsigned short getc(void) {
 
-    struct EFI_INPUT_KEY key;
+    EFI_INPUT_KEY key;
     unsigned long waitidx;
 
     system_table->BootServices->WaitForEvent(1, &(system_table->ConIn->WaitForKey), &waitidx);
@@ -42,10 +42,11 @@ unsigned int gets(unsigned short *buf, unsigned int buf_size) {
 	buf[i] = getc();
 	puts(buf[i]);
 	if (buf[i] == L'\r') {
+	    putc(L'\r');
 	    putc(L'\n');
 	    break;
 	}
-	i++
+	i++;
     }
     buf[i] = L'\0';
 

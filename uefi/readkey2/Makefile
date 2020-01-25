@@ -2,8 +2,8 @@ QEMU=qemu-system-x86_64
 UEFI_CODE=-drive if=pflash,format=raw,readonly,file=uefi_bios.x64/OVMF_CODE.fd
 UEFI_FLASH=-drive if=pflash,format=raw,file=uefi_bios.x64/OVMF_VARS.fd
 
-SRCS=readkey.c common.c
-OBJS=readkey.o common.o
+SRCS=readkey.c common.c shell.c
+OBJS=readkey.o common.o shell.o
 LLVM_CC=clang
 LLVM_LLD_LINK=lld-link
 CFLAGS_LOADER=-target x86_64-pc-win32-coff \
@@ -25,6 +25,8 @@ install: default
 
 run: install
 	$(QEMU) $(UEFI_CODE) $(UEFI_FLASH) -hda fat:rw:efi.image/ -net none
+
+$(OBJS):$(SRCS)
 
 .c.o:
 	$(LLVM_CC) -c -o $@ $< $(CFLAGS_LOADER)
