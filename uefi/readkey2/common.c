@@ -6,9 +6,20 @@ extern EFI_SYSTEM_TABLE    *system_table;
 
 void putc(unsigned short c) {
 
-    unsigned short str[2] = L" ";
+    unsigned short str[3] = L" ";
     str[0] = c;
+
+#if 0    
     //str[1] = 0x00;
+    if ('\r' != c) {
+	str[0] = c;
+    }
+    else {
+	str[0] = '\r';
+	str[1] = '\n';
+	str[2] = '\0';	    
+    }
+#endif
     
     system_table->ConOut->OutputString(system_table->ConOut, str);
 }
