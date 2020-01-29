@@ -2,13 +2,13 @@ QEMU=qemu-system-x86_64
 UEFI_CODE=-drive if=pflash,format=raw,readonly,file=uefi_bios.x64/OVMF_CODE.fd
 UEFI_FLASH=-drive if=pflash,format=raw,file=uefi_bios.x64/OVMF_VARS.fd
 
-SRCS=readkey.c common.c shell.c
-OBJS=readkey.o common.o shell.o
+SRCS=main.c common.c shell.c graphics.c
+OBJS=main.o common.o shell.o graphics.o
 LLVM_CC=clang
-LLVM_LLD_VER=-6.0
-LLVM_LLD_LINK=lld-link$(LLVM_LLD_VER)
+LLVM_LLD_LINK=lld-link
 CFLAGS_LOADER=-target x86_64-pc-win32-coff \
 	   -fno-stack-protector -fno-exceptions -fshort-wchar \
+           -fno-builtin \
 	   -mno-red-zone \
 	   -nostdlibinc \
 	   -Ithird_party_root/include
@@ -33,3 +33,5 @@ $(OBJS):$(SRCS)
 	$(LLVM_CC) -c -o $@ $< $(CFLAGS_LOADER)
 
 
+clean:
+	rm -f ${OBJS} *~ \#*\# BOOTX64.EFI
