@@ -1,7 +1,8 @@
 SRCS=readkey.c
 OBJS=readkey.o
 LLVM_CC=clang
-LLVM_LLD_LINK=lld-link
+LLVM_LLD_VER=-6.0
+LLVM_LLD_LINK=lld-link$(LLVM_LLD_VER)
 CFLAGS_LOADER=-target x86_64-pc-win32-coff \
 	   -fno-stack-protector -fno-exceptions -fshort-wchar \
 	   -mno-red-zone \
