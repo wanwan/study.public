@@ -3,6 +3,9 @@
 
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL *graphics_output;
 const EFI_GRAPHICS_OUTPUT_BLT_PIXEL white = {0xff, 0xff, 0xff, 0xff};
+const EFI_GRAPHICS_OUTPUT_BLT_PIXEL red = {0xff, 0x00, 0x00, 0xff};
+const EFI_GRAPHICS_OUTPUT_BLT_PIXEL green = {0x00, 0xff, 0x00, 0xff};
+const EFI_GRAPHICS_OUTPUT_BLT_PIXEL blue = {0x00, 0x00, 0xff, 0xff};
 
 void draw_pixel(unsigned int x, unsigned int y,
 		EFI_GRAPHICS_OUTPUT_BLT_PIXEL color)

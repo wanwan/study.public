@@ -20,7 +20,8 @@ void shell() {
     unsigned short com[MAX_COMMAND_LEN];
     unsigned short key;
     int idx = 0;
-    RECT r = {10, 10, 100, 200};    
+    //RECT r = {10, 10, 100, 200};    
+    RECT r = {100, 100, 100, 200};    
     
     while(loop) {
 	idx = 0;

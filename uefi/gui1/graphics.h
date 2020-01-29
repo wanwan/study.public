@@ -9,6 +9,9 @@ typedef struct _RECT {
 } RECT;
 
 extern const EFI_GRAPHICS_OUTPUT_BLT_PIXEL white;
+extern const EFI_GRAPHICS_OUTPUT_BLT_PIXEL red;
+extern const EFI_GRAPHICS_OUTPUT_BLT_PIXEL green;
+extern const EFI_GRAPHICS_OUTPUT_BLT_PIXEL blue;
 
 
 void draw_pixel(unsigned int x, unsigned int y,
