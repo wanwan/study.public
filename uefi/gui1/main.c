@@ -9,6 +9,23 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL *graphics_output;
 
 CHAR16              *hello_str = (CHAR16 *)L"Hello, you slab of warm meat!\r\n";
 
+
+extern int printf(char *format, ...);
+
+void check_data_size() {
+
+    printf("sizeof(char) = %d\n", sizeof(char));
+    printf("sizeof(short) = %d\n", sizeof(short));
+    printf("sizeof(int) = %d\n", sizeof(int));
+    printf("sizeof(long) = %d\n", sizeof(long));
+    printf("sizeof(long long) = %d\n", sizeof(long long));
+    printf("sizeof(float) = %d\n", sizeof(float));
+    printf("sizeof(double) = %d\n", sizeof(double));
+    printf("sizeof(long double) = %d\n", sizeof(long double));
+    
+}
+
+
 void efi_main(void* image_handle, EFI_SYSTEM_TABLE* _system_table) {
 
     EFI_INPUT_KEY key;

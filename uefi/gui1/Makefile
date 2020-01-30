@@ -2,8 +2,8 @@ QEMU=qemu-system-x86_64
 UEFI_CODE=-drive if=pflash,format=raw,readonly,file=uefi_bios.x64/OVMF_CODE.fd
 UEFI_FLASH=-drive if=pflash,format=raw,file=uefi_bios.x64/OVMF_VARS.fd
 
-SRCS=main.c common.c shell.c graphics.c
-OBJS=main.o common.o shell.o graphics.o
+SRCS=main.c common.c shell.c graphics.c printf.c
+OBJS=main.o common.o shell.o graphics.o printf.o
 LLVM_CC=clang
 LLVM_LLD_LINK=lld-link
 CFLAGS_LOADER=-target x86_64-pc-win32-coff \
