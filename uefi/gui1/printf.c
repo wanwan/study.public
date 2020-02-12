@@ -107,6 +107,7 @@ static int is_numeric (char c);
 static int is_period (char c);
 static int is_variable_length(char c);
 static int is_variable_type(char c);
+static void show_variable(va_list args);
 
 
 void printf(const char *format, ...) {
@@ -119,8 +120,7 @@ void printf(const char *format, ...) {
 
     while ('\0' != format[i]) {
 	cur = format[i];
-	parse(cur);
-	
+	parse(cur, args);
 	i++;
     }
     
@@ -133,7 +133,7 @@ static void parse_init() {
 }
 
 
-static void parse(char c) {
+static void parse(char c, va_list args) {
 
     MSG_TYPE msg;
     
@@ -142,7 +142,7 @@ static void parse(char c) {
 	if (is_escape_key(c)) {
 	    state = READ_ESCAPE_SEQUENCE;
 	}
-	else if (is_variable_key(c)) {
+	else if (is_variable_key(c)) {	    
 	    memset(variable, 0x00, sizeof(variable));	    
 	    state = READ_VARIABLE;
 	}
@@ -152,6 +152,8 @@ static void parse(char c) {
 	}    
 	break;
     case READ_VARIABLE:
+// %[引数順][フラグ][最小フィールド幅][.精度][長さ修飾子]変換指定子
+// %[parameter][flags][width][.precision][length]type	    	
 	if (is_variable_flags(c)) {
 	    set_flags(c);
 	    state = READ_VARIABLE_FLAGS;	    
@@ -180,14 +182,102 @@ static void parse(char c) {
 	break;
 
     case READ_VARIABLE_FLAGS:
+	if (is_variable_flags(c)) {
+	    set_flags(c);
+	    state = READ_VARIABLE_FLAGS;	    
+	}
+	else if (is_numeric(c)) { // width
+	    set_width(c);
+	    state = READ_VARIABLE_WIDTH;
+	}
+	else if (is_period(c)) {  // precision
+	    set_precision(c);
+	    state = READ_VARIABLE_PRECISION;
+	}
+	else if (is_variable_length(c)) {
+	    set_length(c);
+	    state = READ_VARIABLE_LENGTH;	    
+	}
+	else if (is_variable_type(c)) {
+	    set_type(c);
+	    state = READ_VARIABLE_TYPE;
+	}	
+	else {
+	// TODO: show error log
+	}    
 	break;
     case READ_VARIABLE_WIDTH:
+	if (is_variable_flags(c)) {
+	// TODO: show error log
+	}
+	else if (is_numeric(c)) { // width
+	    set_width(c);
+	    state = READ_VARIABLE_WIDTH;
+	}
+	else if (is_period(c)) {  // precision
+	    set_precision(c);
+	    state = READ_VARIABLE_PRECISION;
+	}
+	else if (is_variable_length(c)) {
+	    set_length(c);
+	    state = READ_VARIABLE_LENGTH;	    
+	}
+	else if (is_variable_type(c)) {
+	    set_type(c);
+	    state = READ_VARIABLE_TYPE;
+	}	
+	else {
+	// TODO: show error log	    
+	}
 	break;
     case READ_VARIABLE_PRECISION:
+	if (is_variable_flags(c)) {
+	// TODO: show error log
+	}
+	else if (is_numeric(c)) {  // precision (after period)
+	    set_precision(c);
+	    state = READ_VARIABLE_PRECISION;
+	}
+	else if (is_period(c)) {
+	// TODO: show error log
+	}
+	else if (is_variable_length(c)) {
+	    set_length(c);
+	    state = READ_VARIABLE_LENGTH;	    
+	}
+	else if (is_variable_type(c)) {
+	    set_type(c);
+	    state = READ_VARIABLE_TYPE;
+	}	
+	else {
+	// TODO: show error log
+	}    
 	break;
     case READ_VARIABLE_LENGTH:
+	if (is_variable_flags(c)) {
+	// TODO: show error log
+	}
+	else if (is_numeric(c)) {
+	// TODO: show error log	    
+	}
+	else if (is_period(c)) {
+	// TODO: show error log
+	}
+	else if (is_variable_length(c)) {
+	    set_length(c);
+	    state = READ_VARIABLE_LENGTH;	    
+	}
+	else if (is_variable_type(c)) {
+	    set_type(c);
+	    state = READ_VARIABLE_TYPE;
+	}	
+	else {
+	// TODO: show error log
+	}    
 	break;
     case READ_VARIABLE_TYPE:
+    // TODO: check?
+	show_variable(args);
 	break;
 	
     case READ_ESCAPE_SEQUENCE:
@@ -299,6 +389,63 @@ static void set_length(char c) {
 
 
 static void set_type(char c) {
+
+    switch (c) {
+    case 'd':
+    case 'i':
+	variable.type = VARIABLE_TYPE_SIGNED_INT;
+	break;
+    case 'u':
+	variable.type = VARIABLE_TYPE_UNSIGNED_INT;
+	break;
+    case 'f':
+	variable.type = VARIABLE_TYPE_FIXED_POINT
+	break;
+    case 'F':
+	variable.type = VARIABLE_TYPE_FIXED_POINT_UPPER_CASE;
+	break;
+    case 'e':
+	variable.type = VARIABLE_TYPE_DOUBLE_EXP;
+	break;
+    case 'E':
+	variable.type = VARIABLE_TYPE_DOUBLE_EXP_UPPER_CASE;
+	break;
+    case 'g':
+	variable.type = VARIABLE_TYPE_DOUBLE_EXP_NORMAL;
+	break;
+    case 'G':
+	variable.type = VARIABLE_TYPE_DOUBLE_EXP_NORMAL_UPPER_CASE;
+	break;
+    case 'x':
+	variable.type = VARIABLE_TYPE_UNSIGNED_INT_HEX;
+	break;
+    case 'X':
+	variable.type = VARIABLE_TYPE_UNSIGNED_INT_HEX_UPPER_CASE;
+	break;
+    case 'o':
+	variable.type = VARIABLE_TYPE_UNSIGNED_INT_OCTAL;
+	break;
+    case 's':
+	variable.type = VARIABLE_TYPE_STRING;
+	break;
+    case 'c':
+	variable.type = VARIABLE_TYPE_CHAR;
+	break;
+    case 'p':
+	variable.type = VARIABLE_TYPE_POINTER;
+	break;
+    case 'a':
+	variable.type = VARIABLE_TYPE_DOUBLE_HEX;
+	break;
+    case 'A':
+	variable.type = VARIABLE_TYPE_DOUBLE_HEX_UPPER_CASE;
+	break;
+    case 'n':
+	variable.type = VARIABLE_TYPE_NOTHING;
+	break;
+    default:
+	break;
+    }	
 }
 
 
@@ -385,5 +532,70 @@ static int is_variable_type(char c) {
 	}
     }
     return 0;
+    
+}
+
+
+static void show_variable(va_list args) {
+
+    int intval;
+    int uintval;    
+    long longval;
+    double floatval;
+    char *strval;
+    
+    switch (variable.type) {
+    case VARIABLE_TYPE_SIGNED_INT:
+	intval = va_arg(args, int);
+	show_variable_signed_int(intval);
+	break;
+    case VARIABLE_TYPE_UNSIGNED_INT:
+	uintval = va_arg(args, unsigned int);
+	show_variable_unsigned_int(intval);
+	break;
+    case VARIABLE_TYPE_FIXED_POINT:
+	break;
+    case VARIABLE_TYPE_FIXED_POINT_UPPER_CASE:
+	break;
+    case VARIABLE_TYPE_DOUBLE_EXP:
+	break;
+    case VARIABLE_TYPE_DOUBLE_EXP_UPPER_CASE:
+	break;
+    case VARIABLE_TYPE_DOUBLE_EXP_NORMAL:
+	break;
+    case VRIABLE_TYPE_DOUBLE_EXP_NORMAL_UPPER_CASE:
+	break;
+    case VARIABLE_TYPE_UNSIGNED_INT_HEX:
+	intval = va_arg(args, int);
+	show_variable_unsigned_int(intval);	
+	break;
+    case VARIABLE_TYPE_UNSIGNED_INT_HEX_UPPER_CASE:
+	intval = va_arg(args, int);
+	show_variable_unsigned_int(intval);	
+	break;
+    case VARIABLE_TYPE_UNSIGNED_INT_OCTAL:
+	intval = va_arg(args, int);
+	show_variable_unsigned_int(intval);		
+	break;
+    case VARIABLE_TYPE_STRING:
+	strval = va_arg(args, char*);
+	show_variable_str(strval);			
+	break;
+    case VARIABLE_TYPE_CHAR:
+	intval = va_arg(args, int);
+	show_variable_signed_int(intval);	
+	break;
+    case VARIABLE_TYPE_POINTER:
+	break;
+    case VARIABLE_TYPE_DOUBLE_HEX:
+	break;
+    case VARIABLE_TYPE_DOUBLE_HEX_UPPER_CASE:
+	break;
+    case VARIABLE_TYPE_NOTHING:
+	break;
+    default:
+	    // TODO:show error
+	break;
+    }
     
 }
